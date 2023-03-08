@@ -216,7 +216,11 @@ class GameData():
         offset = offset / 60 / 60 * -1
         hours = offset
         hours_added = datetime.timedelta(hours=hours)
-        UTC_corrected_start_time = self.gameStartedDate + hours_added
+
+        try:
+            UTC_corrected_start_time = self.gameStartedDate + hours_added
+        except TypeError:
+            UTC_corrected_start_time = None
 
         gameStarted = str(UTC_corrected_start_time)
         channelName = self.settings.data.get('channel')

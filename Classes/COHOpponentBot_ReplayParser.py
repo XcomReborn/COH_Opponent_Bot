@@ -196,13 +196,13 @@ class ReplayParser:
             numberOfBytes = int(numberOfBytes)
             relative = int(relative)
             if relative == 0:
-                assert(0 <= numberOfBytes <= len(self.data))
+                assert (0 <= numberOfBytes <= len(self.data))
                 self.dataIndex = numberOfBytes
             if relative == 1:
-                assert(0 <= (numberOfBytes+self.dataIndex) <= len(self.data))
+                assert (0 <= (numberOfBytes+self.dataIndex) <= len(self.data))
                 self.dataIndex += numberOfBytes
             if relative == 2:
-                assert(0 <= (len(self.data) - numberOfBytes) <= len(self.data))
+                assert (0 <= (len(self.data) - numberOfBytes) <= len(self.data))
                 self.dataIndex = len(self.data) - numberOfBytes
         except Exception as e:
             logging.error(str(e))
@@ -335,7 +335,7 @@ class ReplayParser:
             self.read_unsigned_long_4_bytes()  # unknown
             self.read_unsigned_long_4_bytes()  # unknown
 
-        if(chunkType == "DATABASE") and (int(chunkVersion == 11)):
+        if (chunkType == "DATABASE") and (int(chunkVersion == 11)):
 
             self.seek(16, 1)
 
@@ -376,7 +376,7 @@ class ReplayParser:
             self.read_length_ASCII_string()
             self.matchType = self.read_length_ASCII_string()
 
-        if(chunkType == "DATAINFO") and (chunkVersion == 6):
+        if (chunkType == "DATAINFO") and (chunkVersion == 6):
 
             userName = self.read_length_string()
             self.read_unsigned_long_4_bytes()
@@ -400,8 +400,8 @@ class ReplayParser:
         reEuro = re.compile(r"(\d\d).(\d\d).(\d\d\d\d)\s(\d\d).(\d\d)")
         match = re.match(reEuro, timeString)
         if match:
-            # print("Euro String")
-            # print(match.groups())
+            print("Euro String")
+            print(match.groups())
             try:
                 day = int(match.group(1))
                 month = int(match.group(2))

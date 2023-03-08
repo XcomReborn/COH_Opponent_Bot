@@ -53,7 +53,7 @@ class FactionResult():
                 self.winLossRatio = wlr
             else:
                 self.winLossRatio = 0
-                if(int(self.wins) > 0):
+                if (int(self.wins) > 0):
                     self.winLossRatio = self.wins
         except Exception as e:
             logging.error("In factionResult Creating winLossRatio")
