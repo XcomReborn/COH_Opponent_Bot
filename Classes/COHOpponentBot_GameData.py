@@ -207,6 +207,9 @@ class GameData():
     def get_game_description_string(self) -> str:
         """Produces a single-line game description string."""
 
+        if not self.playerList:
+            return
+
         offset = time.timezone
         if (time.localtime().tm_isdst == 0):
             offset = time.timezone
