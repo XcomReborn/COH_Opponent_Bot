@@ -108,7 +108,8 @@ class MemoryMonitor(threading.Thread):
         # this requires parsing mapName First
         try:
             message = self.gameData.get_game_description_string()
-            self.ircClient.send_message_to_opponentbot_channel(message)
+            if message:
+                self.ircClient.send_message_to_opponentbot_channel(message)
 
         except Exception as e:
             logging.error("Problem in PostData")

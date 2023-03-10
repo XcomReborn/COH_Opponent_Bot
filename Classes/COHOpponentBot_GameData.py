@@ -242,16 +242,18 @@ class GameData():
             mapNameFull = str(self.mapNameFull)
             modName = str(self.modName)
 
+            message = (
+                f"!start,{channelName},{gameStarted},{numberOfHumans},"
+                f"{numberOfComputers},{numberOfPlayers},{slots},{randomStart},"
+                f"{highResources},{VPCount},{automatch},{mapNameFull},"
+                f"{modName}"
+                )
+
         except Exception as e:
             logging.error("Problem Creating Game Description")
             logging.exception("Exception : ")
             logging.error(str(e))
-
-        message = (
-            f"!start,{channelName},{gameStarted},{numberOfHumans},"
-            f"{numberOfComputers},{numberOfPlayers},{slots},{randomStart},"
-            f"{highResources},{VPCount},{automatch},{mapNameFull},{modName}"
-            )
+            return None
 
         for count, item in enumerate(self.playerList):
             steamNumber = ""
@@ -304,7 +306,8 @@ class GameData():
             logging.error(str(e))
 
     def get_pointer_address(self, base: int, offsets: list) -> int | None:
-        """Gets memory address from a pointer address (base) and applies offsets.
+        """Gets memory address from a pointer address (base)
+        and applies offsets.
 
         Parameters
         ----------
@@ -596,7 +599,7 @@ class GameData():
                     # check if item has stats if not it is a computer
                     if item.stats:
                         steamNumber = self.settings.data.get('steamNumber')
-                        if(item.stats.steamNumber == steamNumber):
+                        if (item.stats.steamNumber == steamNumber):
                             if (self.settings.data.get('showOwn')):
                                 self.ircStringOutputList = (
                                     self.ircStringOutputList +

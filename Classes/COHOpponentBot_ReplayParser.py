@@ -199,10 +199,12 @@ class ReplayParser:
                 assert (0 <= numberOfBytes <= len(self.data))
                 self.dataIndex = numberOfBytes
             if relative == 1:
-                assert (0 <= (numberOfBytes+self.dataIndex) <= len(self.data))
+                assert (
+                    0 <= (numberOfBytes+self.dataIndex) <= len(self.data))
                 self.dataIndex += numberOfBytes
             if relative == 2:
-                assert (0 <= (len(self.data) - numberOfBytes) <= len(self.data))
+                assert (
+                    0 <= (len(self.data) - numberOfBytes) <= len(self.data))
                 self.dataIndex = len(self.data) - numberOfBytes
         except Exception as e:
             logging.error(str(e))
