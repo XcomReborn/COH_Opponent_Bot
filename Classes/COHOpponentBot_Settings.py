@@ -30,8 +30,8 @@ class Settings:
         # yes I know you shouldn't post oauth codes to github
         # but I don't think this matter because this is a
         # multi-user throw away account... lets see what happens.
-        self.privatedata['IRCserver'] = 'irc.twitch.tv'
-        self.privatedata['IRCport'] = 6667
+        self.privatedata['IRCserver'] = 'irc.chat.twitch.tv'
+        self.privatedata['IRCport'] = 80
         self.privatedata['adminUserName'] = 'xcomreborn'
 
         # User information for server identification and authorisation
