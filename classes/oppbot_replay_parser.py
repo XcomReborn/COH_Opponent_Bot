@@ -137,9 +137,9 @@ class ReplayParser:
         except Exception as e:
             logging.error(str(e))
             logging.error("Failed to read a string of specified length")
-            logging.info(self.dataIndex)
-            logging.info(stringLength)
-            logging.info(theBytes)
+            #logging.info(self.dataIndex)
+            #logging.info(stringLength)
+            #logging.info(theBytes)
             logging.exception("Stack Trace: ")
             self.success = False
 
