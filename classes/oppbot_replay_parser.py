@@ -126,8 +126,7 @@ class ReplayParser:
             self.success = False
 
     def read_ASCII_string(self, stringLength=0) -> str:
-        "Reads and ASCII string of specfied length."
-
+        "Reads an ASCII string of specfied length."
         try:
             if self.data:
                 theBytes = bytearray(
@@ -138,6 +137,9 @@ class ReplayParser:
         except Exception as e:
             logging.error(str(e))
             logging.error("Failed to read a string of specified length")
+            logging.info(self.dataIndex)
+            logging.info(stringLength)
+            logging.info(theBytes)
             logging.exception("Stack Trace: ")
             self.success = False
 
@@ -223,7 +225,7 @@ class ReplayParser:
         self.seek(76, 0)
 
         firstRelicChunkyAddress = self.dataIndex
-
+        
         self.read_ASCII_string(stringLength=12)  # relicChunky
 
         self.read_unsigned_long_4_bytes()  # unknown
@@ -358,6 +360,7 @@ class ReplayParser:
                 self.read_length_ASCII_string()
                 self.gameVersion = self.read_length_ASCII_string()
             self.read_length_ASCII_string()
+            # cant find in korean replay
             self.matchType = self.read_length_ASCII_string()
 
         if (chunkType == "DATAINFO") and (chunkVersion == 6):

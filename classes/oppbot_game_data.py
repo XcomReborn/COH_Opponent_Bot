@@ -125,10 +125,12 @@ class GameData():
 
         self.highResources = replayParser.highResources
         self.VPCount = replayParser.VPCount
-        if replayParser.matchType.lower() == "automatch":
-            self.automatch = True
-        else:
-            self.automatch = False
+        self.automatch = False
+        # Korean replays don't contain a matchType string
+        if replayParser.matchType:
+            if replayParser.matchType.lower() == "automatch":
+                self.automatch = True
+
 
         self.mapName = replayParser.mapName
         self.mapDescription = replayParser.mapDescription
