@@ -428,11 +428,11 @@ class ReplayParser:
                 logging.exception("Exception : ")
 
         # YYYY/MM/DD HH:MM
-        reAsian = re.compile(r"(\d\d\d\d).(\d\d).(\d\d)\s(\d\d).(\d\d)")
-        s = " ".join((str(timeString).encode("ascii", "ignore").decode()))
+        reAsian = re.compile(r"(\d\d\d\d).(\d\d).(\d\d)\s([^\u0000-\u007F]+)\s(\d?\d).(\d\d)")
+        # korean AM/PM 오후 means PM
         match = re.match(
             reAsian,
-            s
+            timeString
         )
         if match:
             logging.info("Asian Date String")
@@ -441,15 +441,22 @@ class ReplayParser:
                 day = int(match.group(3))
                 month = int(match.group(2))
                 year = int(match.group(1))
-                hour = int(match.group(4))
-                minute = int(match.group(5))
-                return datetime.datetime(
+                hour = int(match.group(5))
+                minute = int(match.group(6))
+                meridiem = match.group(4)
+                # korean pm
+                print(meridiem)
+                if meridiem == "오후":
+                     hour = hour + 12
+                date_time = datetime.datetime(
                     year=year,
                     month=month,
                     day=day,
                     hour=hour,
                     minute=minute
                 )
+                print(date_time)
+                return date_time
             except Exception as e:
                 logging.error(str(e))
                 logging.exception("Exception : ")
