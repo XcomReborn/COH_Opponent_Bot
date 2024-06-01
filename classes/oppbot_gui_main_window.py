@@ -153,6 +153,8 @@ class GUIMainWindow:
         self.frame_twitch.grid_rowconfigure(0, weight=1)
         self.frame_twitch.grid_columnconfigure(0, weight=1)
 
+        # Connect Button
+
         self.button_connect = ttk.Button(
             self.frame_twitch,
             text="Connect",
@@ -184,6 +186,8 @@ class GUIMainWindow:
         else:
             self.button_connect.configure(state=DISABLED)
 
+        # Options Button
+
         self.button_options = tkinter.Button(
             self.frame_twitch,
             text="options",
@@ -198,7 +202,7 @@ class GUIMainWindow:
         # test output button
 
         self.button_test = None
-        if self.settings.data.get("devMode"):
+        if self.settings.privatedata.get("devMode"):
 
             self.button_test = tkinter.Button(
                 self.frame_twitch,
@@ -211,6 +215,37 @@ class GUIMainWindow:
                 row=1,
                 column=1)
             self.button_test.config(state=DISABLED)
+
+        #Add in extra entry field for sending messages to twitch chat as the bot.
+        if self.settings.privatedata.get('devMode'):
+
+            # Frame messaage
+
+            self.frame_message = tkinter.LabelFrame(
+                self.frame_twitch,
+                text="Send To Chat"
+            )
+            self.frame_message.grid(sticky=N+S+W+E, columnspan=2)
+            self.frame_message.grid_rowconfigure(0, weight=1)
+            self.frame_message.grid_columnconfigure(0, weight=1)
+
+            #create entry field
+
+            self.entry_send_message = tkinter.Entry(
+                self.frame_message,
+                width=70)
+            self.entry_send_message.grid(sticky=W, row=0)
+            self.entry_send_message.bind(
+                '<Return>',
+                self.send_to_chat)
+
+            #create send button
+
+            self.button_send = tkinter.Button(
+            self.frame_message, text="send",
+            command=self.send_to_chat)
+            self.button_send.config(width=10)
+            self.button_send.grid(sticky=E, row=0, column=1)
 
         # Overlay Frame
 
@@ -431,39 +466,14 @@ class GUIMainWindow:
         self.menu_help.add_command(
             label="About...",
             command=self.show_about_dialogue)
-       
+        
+        self.master.config(menu=self.menu_bar)
+        
+        # Assign Delete function
 
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-        self.master.config(menu=self.menu_bar)
-
-        #Add in extra entry field for sending messages to twitch chat as the bot.
-        if self.settings.privatedata.get('devMode'):
-            self.frame_message = tkinter.LabelFrame(
-                self.master,
-                text="Send To Chat"
-            )
-            self.frame_message.grid(sticky=N+S+W+E)
-            self.frame_message.grid_rowconfigure(0, weight=1)
-            self.frame_message.grid_columnconfigure(0, weight=1)
-
-            #create entry field
-
-            self.entry_send_message = tkinter.Entry(
-                self.frame_message,
-                width=70)
-            self.entry_send_message.grid(sticky=W, row=0)
-            self.entry_send_message.bind(
-                '<Return>',
-                self.send_to_chat)
-
-            #create send button
-
-            self.button_send = tkinter.Button(
-            self.frame_message, text="send",
-            command=self.send_to_chat)
-            self.button_send.config(width=10)
-            self.button_send.grid(sticky=E, row=0, column=1)
+        # Start Memory Monitor
 
         self.start_coh_monitor()
 

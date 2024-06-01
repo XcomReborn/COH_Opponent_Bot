@@ -137,7 +137,7 @@ class Settings:
         # yes I know you shouldn't post oauth codes to github
         # but I don't think this matters because this is a
         # multi-user throw away account... lets see what happens.
-        self.privatedata['devMode'] = False
+        self.privatedata['devMode'] = True
         # devMode flag for extra addin options set False for normal
         # opperation.
 
