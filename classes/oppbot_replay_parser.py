@@ -380,8 +380,8 @@ class ReplayParser:
         reEuro = re.compile(r"(\d\d).(\d\d).(\d\d\d\d)\s(\d\d).(\d\d)")
         match = re.match(reEuro, timeString)
         if match:
-            print("Euro String")
-            print(match.groups())
+            logging.info("Euro String")
+            logging.info(match.groups())
             try:
                 day = int(match.group(1))
                 month = int(match.group(2))
@@ -405,8 +405,8 @@ class ReplayParser:
             )
         match = re.match(reUS, timeString)
         if match:
-            print("US String")
-            print(match.groups())
+            logging.info("US Date String")
+            logging.info(match.groups())
             try:
                 day = int(match.group(2))
                 month = int(match.group(1))
@@ -430,14 +430,13 @@ class ReplayParser:
         # YYYY/MM/DD HH:MM
         reAsian = re.compile(r"(\d\d\d\d).(\d\d).(\d\d)\s(\d\d).(\d\d)")
         s = " ".join((str(timeString).encode("ascii", "ignore").decode()))
-        s = s.split()
         match = re.match(
             reAsian,
             s
         )
         if match:
-            print("Asian String")
-            print(match.groups())
+            logging.info("Asian Date String")
+            logging.info(match.groups())
             try:
                 day = int(match.group(3))
                 month = int(match.group(2))
