@@ -131,17 +131,14 @@ class ReplayParser:
             if self.data:
                 theBytes = bytearray(
                     self.data[self.dataIndex:self.dataIndex+stringLength])
-                self.dataIndex += stringLength
                 theString = theBytes.decode('ascii')
+                self.dataIndex += stringLength
                 return theString
-        except Exception as e:
-            logging.error(str(e))
-            logging.error("Failed to read a string of specified length")
-            #logging.info(self.dataIndex)
-            #logging.info(stringLength)
-            #logging.info(theBytes)
-            logging.exception("Stack Trace: ")
-            self.success = False
+        except UnicodeDecodeError:
+            # if unable to get an ASCII string try for a ucs2 string.
+            theString = self.read_2_byte_string(stringLength=stringLength)
+            return theString
+
 
     def read_null_terminated_2_byte_string(self) -> str:
         "Reads a Utf-16 little endian character string."
@@ -348,20 +345,23 @@ class ReplayParser:
 
             self.seek(23, 1)
 
-            self.read_length_ASCII_string()
+            self.read_length_ASCII_string() # gameminorversion
 
             self.seek(4, 1)
 
-            self.read_length_ASCII_string()
+            self.read_length_ASCII_string() # gamemajorversion
 
             self.seek(8, 1)
-
+            # matchname
             if (self.read_unsigned_long_4_bytes() == 2):
-                self.read_length_ASCII_string()
+                self.read_length_ASCII_string() # gameversion
                 self.gameVersion = self.read_length_ASCII_string()
             self.read_length_ASCII_string()
             # cant find in korean replay
             self.matchType = self.read_length_ASCII_string()
+            # korean 2v2 contains a long 'nonsense' string.
+            if "\uc0de\u0bad\u0101\u4204\u4cc5\u0103\u1000" in self.matchType:
+                self.matchType = "autoamtch"
 
         if (chunkType == "DATAINFO") and (chunkVersion == 6):
 
@@ -448,7 +448,6 @@ class ReplayParser:
                 minute = int(match.group(6))
                 meridiem = match.group(4)
                 # korean pm
-                print(meridiem)
                 if meridiem == "오후":
                      hour = hour + 12
                 date_time = datetime.datetime(
@@ -458,7 +457,6 @@ class ReplayParser:
                     hour=hour,
                     minute=minute
                 )
-                print(date_time)
                 return date_time
             except Exception as e:
                 logging.error(str(e))
