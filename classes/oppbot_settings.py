@@ -21,7 +21,7 @@ class Settings:
         self.privatedata = {}
 
         # Manually update for about box.
-        self.privatedata['version_number'] = "5.0c"
+        self.privatedata['version_number'] = "5.0d"
         self.privatedata['build_date'] = "01-JUN-2024"
 
         # custom display toggles

@@ -361,7 +361,7 @@ class ReplayParser:
             self.matchType = self.read_length_ASCII_string()
             # korean 2v2 contains a long 'nonsense' string.
             if "\uc0de\u0bad\u0101\u4204\u4cc5\u0103\u1000" in self.matchType:
-                self.matchType = "autoamtch"
+                self.matchType = "automatch"
 
         if (chunkType == "DATAINFO") and (chunkVersion == 6):
 
