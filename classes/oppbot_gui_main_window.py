@@ -54,6 +54,7 @@ class GUIMainWindow:
         self.options_menu = None
 
         self.style = Style()
+
         self.master.title("COH Opponent Bot")
 
         self.frame_game_info = tkinter.LabelFrame(
@@ -158,12 +159,12 @@ class GUIMainWindow:
         self.button_connect = ttk.Button(
             self.frame_twitch,
             text="Connect",
-            style='W.TButton',
+            style='Connect.TButton',
             command=self.connect_irc
             )
 
         self.style.configure(
-            'W.TButton',
+            'Connect.TButton',
             font='calibri',
             size=10,
             foreground='red')
@@ -269,20 +270,29 @@ class GUIMainWindow:
         self.button_options.grid(
             sticky=E+W,
             row=0,
-            column= 4)
+            column= 1)
 
         # Open Overlay Button
 
-        self.button_open_overlay = tkinter.Button(
+        self.button_open_overlay = ttk.Button(
             self.frame_overlay,
             text="Open Overlay in Browser",
+            style='Overlay.TButton',
             command=self.open_overlay_browser)
         
         self.button_open_overlay.config(width=20)
         self.button_open_overlay.grid(
             sticky=W+E,
-            row=1,
-            column=3)
+            row=0,
+            column=0,
+            padx=30,
+            pady=30)
+        
+        self.style.configure(
+            'Overlay.TButton',
+            font='calibri',
+            size=10,
+            foreground='blue')
 
         # Clear Overlay Button
 
@@ -295,24 +305,36 @@ class GUIMainWindow:
         self.clear_overlay_button.grid(
             sticky=E,
             row=1,
-            column=4)
+            column=1,
+            pady=(0,5))
+        
+        # Stat Request Frame
+        self.frame_stat_request = tkinter.Frame(
+            self.frame_overlay,
+        )
+        self.frame_stat_request.grid(
+            sticky=N+S+E+W,
+            columnspan=3
+        )
+        self.frame_stat_request.grid_rowconfigure(0, weight=1)
+        self.frame_stat_request.grid_columnconfigure(0, weight=1)
         
         # Label
         self.label_stat_request = tkinter.Label(
-            self.frame_overlay,
+            self.frame_stat_request,
             text="Request Stat For : "
         )
         self.label_stat_request.grid(
             sticky=W,
-            row=2,
+            row=0,
             column=0
         )
         
         # Steam Number Entry
-        self.entry_stat_request = tkinter.Entry(self.frame_overlay, width=40)
+        self.entry_stat_request = tkinter.Entry(self.frame_stat_request, width=40)
         self.entry_stat_request.grid(
             sticky=W,
-            row=2,
+            row=0,
             column=1,
             padx=(5,5)
         )
@@ -328,13 +350,13 @@ class GUIMainWindow:
         # Steam Number Entry Edit Button
 
         self.button_stat_edit = tkinter.Button(
-            self.frame_overlay,
+            self.frame_stat_request,
             text="Edit",
             command=self.edit_stat_request
         )
         self.button_stat_edit.grid(
             sticky=W,
-            row=2,
+            row=0,
             column=2
         )
         self.button_stat_edit.configure(width=10)
@@ -343,27 +365,27 @@ class GUIMainWindow:
         # Display Stats Button
 
         self.button_display_stats = tkinter.Button(
-            self.frame_overlay,
+            self.frame_stat_request,
             text="Display Stats in Browser",
             command=self.open_stats_browser)
         
         self.button_display_stats.config(width=20)
         self.button_display_stats.grid(
             sticky=W+E,
-            row=2,
+            row=0,
             column=3)
                 
         # Clear Stats Button
 
         self.clear_overlay_button = tkinter.Button(
-            self.frame_overlay,
+            self.frame_stat_request,
             text="Clear Stats",
             command=GameData.clear_stats_HTML)
         
         self.clear_overlay_button.config(width=10)
         self.clear_overlay_button.grid(
             sticky=E+W,
-            row=2,
+            row=0,
             column=4)
 
         # Console Output Frame
@@ -374,7 +396,7 @@ class GUIMainWindow:
             )
         self.frame_console.grid()
 
-        # Text widget
+        # Text Console
 
         self.txt_console = tkinter.Text(
             self.frame_console,
