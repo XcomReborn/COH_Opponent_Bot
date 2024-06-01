@@ -41,7 +41,7 @@ class MemoryMonitor(threading.Thread):
             while self.running:
                 # Create new instance of GameData because reference to irc client 
                 # may not exist when first started
-                self.gameData = GameData(irc_client=self.irc_client, tkconsole=self.tkconsole)
+                self.gameData = GameData(irc_client=self.irc_client, tkconsole=self.tkconsole, settings=self.settings)
                 self.gameData.get_data_from_game()
                 if self.gameData.gameInProgress:
                     # COH_REC exists game running

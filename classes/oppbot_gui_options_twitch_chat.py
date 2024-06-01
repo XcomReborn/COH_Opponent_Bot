@@ -236,6 +236,9 @@ class OptionsTwitchChat:
             cco = self.stringvar_twitch_chat_pf.get()
             self.settings.data['chat_custom_pf'] = cco
         self.settings.save()
+        if self.main_window.coh_memory_monitor:
+            self.main_window.coh_memory_monitor.settings = self.settings
+
         return True  # must return true to a validate entry method
 
     def save_toggles(self):
@@ -256,6 +259,9 @@ class OptionsTwitchChat:
             bool(self.intvar_enable_twitch_bot.get()))
 
         self.settings.save()
+        if self.main_window.coh_memory_monitor:
+            self.main_window.coh_memory_monitor.settings = self.settings
+
 
     def toggle_enable_twitch(self):
         """enables or disables toggle"""
@@ -282,6 +288,9 @@ class OptionsTwitchChat:
                 self.main_window.enable_buttons()
                 self.settings.data['channel'] = self.entry_twitch_channel.get()
                 self.settings.save()
+                if self.main_window.coh_memory_monitor:
+                    self.main_window.coh_memory_monitor.settings = self.settings
+
             else:
                 messagebox.showerror(
                     "Invalid Twitch channel",
@@ -304,6 +313,9 @@ class OptionsTwitchChat:
                 botacc = self.entry_bot_account_name.get()
                 self.settings.data['botUserName'] = botacc
                 self.settings.save()
+                if self.main_window.coh_memory_monitor:
+                    self.main_window.coh_memory_monitor.settings = self.settings
+
             else:
                 messagebox.showerror(
                     "Invalid Twitch channel",
@@ -326,6 +338,9 @@ class OptionsTwitchChat:
                 oAuth = self.entry_bot_oAuthKey.get()
                 self.settings.data['botOAuthKey'] = oAuth
                 self.settings.save()
+                if self.main_window.coh_memory_monitor:
+                    self.main_window.coh_memory_monitor.settings = self.settings
+
             else:
                 messagebox.showerror(
                     "Invaid OAuth Key",

@@ -576,6 +576,8 @@ class OptionsOverlay:
         text = self.textbox_stats_pf.get("1.0", END)
         self.settings.data['overlay_display_pf'] = text
         self.settings.save()
+        if self.main_window.coh_memory_monitor:
+            self.main_window.coh_memory_monitor.settings = self.settings
 
     def save_textvars(self):
         "saves the textvars."
@@ -617,6 +619,8 @@ class OptionsOverlay:
             self.settings.data['overlay_custom_right_pf'] = text
 
         self.settings.save()
+        if self.main_window.coh_memory_monitor:
+            self.main_window.coh_memory_monitor.settings = self.settings
         return True  # must return true to a validate entry method
 
     def browse_css_custom_path(self):
@@ -638,6 +642,9 @@ class OptionsOverlay:
                 self.entry_css_custom.insert(0, str(css_path))
             self.entry_css_custom.config(state=DISABLED)
             self.settings.save()
+            if self.main_window.coh_memory_monitor:
+                self.main_window.coh_memory_monitor.settings = self.settings
+
         self.main_window.enable_buttons()
 
     def browse_css_ranked_path(self):
@@ -659,6 +666,10 @@ class OptionsOverlay:
                 self.entry_css_ranked.insert(0, str(css_path))
             self.entry_css_ranked.config(state=DISABLED)
             self.settings.save()
+            if self.main_window.coh_memory_monitor:
+                self.main_window.coh_memory_monitor.settings = self.settings
+
+
         self.main_window.enable_buttons()
 
     def browse_css_unranked_path(self):
@@ -680,6 +691,10 @@ class OptionsOverlay:
                 self.entry_css_unranked.insert(0, str(css_path))
             self.entry_css_unranked.config(state=DISABLED)
             self.settings.save()
+            if self.main_window.coh_memory_monitor:
+                self.main_window.coh_memory_monitor.settings = self.settings
+
+
         self.main_window.enable_buttons()
 
     def browse_css_display_file_path_button(self):
@@ -701,6 +716,9 @@ class OptionsOverlay:
                 self.entry_css_display_file_path.insert(0, str(css_path))
             self.entry_css_display_file_path.config(state=DISABLED)
             self.settings.save()
+            if self.main_window.coh_memory_monitor:
+                self.main_window.coh_memory_monitor.settings = self.settings
+
         self.main_window.enable_buttons()
 
     def save_toggles(self):
@@ -713,3 +731,5 @@ class OptionsOverlay:
             bool(self.intvar_enable_overlay.get()))
 
         self.settings.save()
+        if self.main_window.coh_memory_monitor:
+            self.main_window.coh_memory_monitor.settings = self.settings

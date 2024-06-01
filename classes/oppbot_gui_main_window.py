@@ -563,6 +563,8 @@ class GUIMainWindow:
             # and Yen symbol for Japanese language paths
             the_file_name = re.sub(pattern, "/", self.master.filename)
             self.settings.save(the_file_name)
+            if self.coh_memory_monitor:
+                self.coh_memory_monitor.settings = self.settings
 
     def load_preferences(self):
         "load preferences drop down."
@@ -655,6 +657,8 @@ class GUIMainWindow:
                 steam64ID = self.entry_stat_request.get()
                 self.settings.data['stat_request_number'] = steam64ID
                 self.settings.save()
+                if self.coh_memory_monitor:
+                    self.coh_memory_monitor.settings = self.settings
             else:
                 messagebox.showerror(
                     "Invaid Steam Number", "Please enter your steam number\n"
@@ -675,6 +679,8 @@ class GUIMainWindow:
                 steam64ID = self.entry_steam64id_number.get()
                 self.settings.data['steamNumber'] = steam64ID
                 self.settings.save()
+                if self.coh_memory_monitor:
+                    self.coh_memory_monitor.settings = self.settings
             else:
                 messagebox.showerror(
                     "Invaid Steam Number", "Please enter your steam number\n"
@@ -693,6 +699,8 @@ class GUIMainWindow:
             self.enable_buttons()
             self.settings.data['steamAlias'] = self.entry_steam_name.get()
             self.settings.save()
+            if self.coh_memory_monitor:
+                self.coh_memory_monitor.settings = self.settings
 
     def special_match(
             self,
@@ -745,6 +753,8 @@ class GUIMainWindow:
                 self.entry_relic_coh_path.insert(0, str(cohpath))
             self.entry_relic_coh_path.config(state=DISABLED)
             self.settings.save()
+            if self.coh_memory_monitor:
+                self.coh_memory_monitor.settings = self.settings
         self.enable_buttons()
 
     def connect_irc(self):
