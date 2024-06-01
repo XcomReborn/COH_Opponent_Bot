@@ -1,0 +1,159 @@
+
+
+
+
+body {
+
+
+  }
+
+html {
+
+}
+
+.container{
+
+
+}
+
+.countryflagimg{
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.countryflagimg img{
+    position: relative;
+    display: inline;
+    height:16pt;
+}
+
+
+.factionflagimg{
+    position: relative;
+    display: inline;
+    height:16pt;
+}
+
+.factionflagimg img{
+    position: relative;
+    display: inline;
+    height:16pt;
+}
+
+.rankimg {
+    position: relative;
+    display: inline;
+    height:16pt;
+}
+
+.rankimg img{
+    position: relative;
+    display: inline;
+    height:16pt;
+}
+
+.textVariables {
+    position: relative;
+    display: inline;
+}
+
+.name {
+    position: relative;
+    display: inline;
+}
+
+.faction {
+    position: relative;
+    display: inline;
+}
+
+.matchtype {
+    position: relative;
+    display: inline;
+}
+
+.country {
+    position: relative;
+    display: inline;
+}
+
+.totalwins {
+    position: relative;
+    display: inline;
+}
+
+.totallosses {
+    position: relative;
+    display: inline;
+}
+
+.totalwlratio {
+    position: relative;
+    display: inline;
+}
+
+.wins {
+    position: relative;
+    display: inline;
+}
+
+.losses {
+    position: relative;
+    display: inline;
+}
+
+.disputes {
+    position: relative;
+    display: inline;
+}
+
+.streak {
+    position: relative;
+    display: inline;
+}
+
+.drops {
+    position: relative;
+    display: inline;
+}
+
+.rank {
+    position: relative;
+    display: inline;
+}
+
+.level {
+    position: relative;
+    display: inline;
+}
+
+.wlratio {
+    position: relative;
+    display: inline;
+}
+
+.nonVariableText{
+    position: relative;
+    display: inline;
+}
+
+.steamprofile{
+    position: relative;
+    display: inline;
+}
+
+.cohstatslink{
+    position: relative;
+    display: inline;
+}
+
+
+.playerStats {
+
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+
+  }
+
+    
