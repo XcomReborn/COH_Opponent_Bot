@@ -56,7 +56,7 @@ class Settings:
 
         self.data['mirrorLeftToRightOverlay'] = True
 
-        temp = "$LEVELICON$ $FLAGICON$ $NAME$<BR>"
+        temp = "$FACTIONICON$ $FLAGICON$ $NAME$<BR>"
         self.data['overlay_default_right_pf'] = temp
         temp = "$FACTIONICON$ $RANK$ $LEVELICON$ ($FLAGICON$) $NAME$<BR>"
         self.data['overlay_1v1_right_pf'] = temp
