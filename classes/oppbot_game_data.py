@@ -574,7 +574,6 @@ class GameData():
         # Check for server contact, if denied do not output anything
         stat_request = StatsRequest()
         result = stat_request.get_available_leaderboards_from_server()
-        print(result)
         if not result:
             if self.tkconsole:
                 message = "Unable to get data from the relic server."

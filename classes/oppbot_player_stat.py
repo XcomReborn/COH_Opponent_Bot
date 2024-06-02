@@ -12,6 +12,7 @@ class PlayerStat:
         # steamNumber is required in addition to statData
         # to compare the steamNumber to the internal profiles
         # that can contain other profile info
+
         self.leaderboardData = {}
         self.totalWins = 0
         self.totalLosses = 0

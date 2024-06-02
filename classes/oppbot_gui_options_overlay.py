@@ -12,6 +12,7 @@ import tkinter.scrolledtext
 import webbrowser
 
 from classes.oppbot_game_data import GameData
+from classes.oppbot_overlay_test import OverlayTest
 from classes.oppbot_player import Player
 from classes.oppbot_settings import Settings
 from classes.oppbot_stats_request import StatsRequest
@@ -210,6 +211,14 @@ class OptionsOverlay:
             command=lambda : self.mirror_left_right_entry(self.entry_default_pf_right))
         self.button_mirror_default_pf.grid(sticky=E, row=1, column=3)
 
+        # button test
+        self.button_test_default_pf = tkinter.Button(
+            self.frame_overlay_pf,
+            text="TEST")
+        self.button_test_default_pf.configure(
+            command=lambda : self.test_overlay(self.label_default))
+        self.button_test_default_pf.grid(sticky=E, row=1, column=4)
+
         # 1v1 Label
         self.label_1v1 = tkinter.Label(self.frame_overlay_pf, text="1v1")
         self.label_1v1.grid(sticky=W, row=2, column=0)
@@ -245,6 +254,14 @@ class OptionsOverlay:
         self.button_mirror_1v1_pf.configure(
             command=lambda : self.mirror_left_right_entry(self.entry_1v1_pf_right))
         self.button_mirror_1v1_pf.grid(sticky=E, row=2, column=3)
+
+        # button test
+        self.button_test_1v1_pf = tkinter.Button(
+            self.frame_overlay_pf,
+            text="TEST")
+        self.button_test_1v1_pf.configure(
+            command=lambda : self.test_overlay(self.label_1v1))
+        self.button_test_1v1_pf.grid(sticky=E, row=2, column=4)
 
         # 2v2 Label
         self.label_2v2 = tkinter.Label(self.frame_overlay_pf, text="2v2")
@@ -282,6 +299,14 @@ class OptionsOverlay:
             command=lambda : self.mirror_left_right_entry(self.entry_2v2_pf_right))
         self.button_mirror_2v2_pf.grid(sticky=E, row=3, column=3)
 
+        # button test
+        self.button_test_2v2_pf = tkinter.Button(
+            self.frame_overlay_pf,
+            text="TEST")
+        self.button_test_2v2_pf.configure(
+            command=lambda : self.test_overlay(self.label_2v2))
+        self.button_test_2v2_pf.grid(sticky=E, row=3, column=4)
+
         # 3v3 Label
         self.label_3v3 = tkinter.Label(self.frame_overlay_pf, text="3v3")
         self.label_3v3.grid(sticky=W, row=4, column=0)
@@ -317,6 +342,14 @@ class OptionsOverlay:
         self.button_mirror_3v3_pf.configure(
             command=lambda : self.mirror_left_right_entry(self.entry_3v3_pf_right))
         self.button_mirror_3v3_pf.grid(sticky=E, row=4, column=3)
+
+        # button test
+        self.button_test_3v3_pf = tkinter.Button(
+            self.frame_overlay_pf,
+            text="TEST")
+        self.button_test_3v3_pf.configure(
+            command=lambda : self.test_overlay(self.label_3v3))
+        self.button_test_3v3_pf.grid(sticky=E, row=4, column=4)
 
         # 4v4 Label
         self.label_4v4 = tkinter.Label(self.frame_overlay_pf, text="4v4")
@@ -354,6 +387,14 @@ class OptionsOverlay:
             command=lambda : self.mirror_left_right_entry(self.entry_4v4_pf_right))
         self.button_mirror_4v4_pf.grid(sticky=E, row=5, column=3)
 
+        # button test
+        self.button_test_4v4_pf = tkinter.Button(
+            self.frame_overlay_pf,
+            text="TEST")
+        self.button_test_4v4_pf.configure(
+            command=lambda : self.test_overlay(self.label_4v4))
+        self.button_test_4v4_pf.grid(sticky=E, row=5, column=4)
+
         # Custom Label
         self.label_custom = tkinter.Label(self.frame_overlay_pf, text="Custom")
         self.label_custom.grid(sticky=W, row=6, column=0)
@@ -389,6 +430,14 @@ class OptionsOverlay:
         self.button_mirror_custom_pf.configure(
             command=lambda : self.mirror_left_right_entry(self.entry_custom_pf_right))
         self.button_mirror_custom_pf.grid(sticky=E, row=6, column=3)
+
+        # button test
+        self.button_test_custom_pf = tkinter.Button(
+            self.frame_overlay_pf,
+            text="TEST")
+        self.button_test_custom_pf.configure(
+            command=lambda : self.test_overlay(self.label_custom))
+        self.button_test_custom_pf.grid(sticky=E, row=6, column=4)
 
         # CSS File Location Frame
 
@@ -803,6 +852,31 @@ class OptionsOverlay:
             player.name = stat.alias
         gamedata.create_stats_html(player)
         webbrowser.open("stats.html", new=2)
+
+    def test_overlay(self, label : tkinter.Label = None):
+        # create gamedata
+
+        if label:
+            overlay_test = OverlayTest(settings=self.settings)
+
+            if "Default" in label.cget("text"):
+                overlay_test.test_default()
+
+            if "1v1" in label.cget("text"):
+                overlay_test.test_1v1()
+
+            if "2v2" in label.cget("text"):
+                overlay_test.test_2v2()
+
+            if "3v3" in label.cget("text"):
+                overlay_test.test_3v3()
+
+            if "4v4" in label.cget("text"):
+                overlay_test.test_4v4()
+
+            if "Custom" in label.cget("text"):
+                overlay_test.test_custom()
+            webbrowser.open("overlay.html", new=2)
 
 
     def mirror_left_right_entry(self, entry : tkinter.Entry):
