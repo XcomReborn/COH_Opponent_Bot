@@ -1226,61 +1226,77 @@ class GameData():
 
     def create_stats_html(self, player):
         "Creates stats.html to display player stats in full."
-        try:
             
-            if not player.stats:
-                message = "Unable to get data from the relic server."
-                self.send_to_tkconsole(message)
-                logging.error(message)
-                return
+        if not player.stats:
+            message = "Unable to get data from the relic server."
+            self.send_to_tkconsole(message)
+            logging.error(message)
+            return
 
-            cssFilePath = self.settings.data.get('css_style_display')
-            # if the css file doens't exist create one from template
-            if cssFilePath:
-                if not (os.path.isfile(cssFilePath)):
-                    with open(
-                        cssFilePath,
-                        'w',
-                        encoding="utf-8"
-                    ) as outfile:
-                        outfile.write(OverlayTemplates().overlaycss)
+        cssFilePath = self.settings.data.get('css_style_display')
+        # if the css file doens't exist create one from template
+        if cssFilePath:
+            if not (os.path.isfile(cssFilePath)):
+                with open(
+                    cssFilePath,
+                    'w',
+                    encoding="utf-8"
+                ) as outfile:
+                    outfile.write(OverlayTemplates().overlaycss)
 
-            pf = self.settings.data.get('overlay_display_pf')
-            # first substitute all the text in the preformat
+        pf = self.settings.data.get('overlay_display_pf')
+        # first substitute all the text in the preformat
 
-            # loop over all game types
-            theString = ""
+        # loop over all game types
+        theString = ""
 
-            for match in MatchType:
-                for faction in Faction:
-                    for value in player.stats.leaderboardData:
-                        ld = player.stats.leaderboardData[value]
-                        playerFaction = str(ld.faction)
-                        if (playerFaction == str(faction)):
-                            playerMatchtype = str(ld.matchType)
-                            if (playerMatchtype == str(match)):
-                                self.matchType = match
-                                player.faction = faction
-                                sFD = self.populate_string_formatting_dictionary(player, overlay=True)
-                                sFD.update(self.populate_image_formatting_dictionary(player))
+        display_match_type = -1
+        display_match_type = self.settings.data.get('display_match_type')
+        try:
+            display_match_type = int(display_match_type)
+        except ValueError as e:
+            logging.error(e)
+        display_faction = -1
+        display_faction = self.settings.data.get('display_faction')
+        try:
+            display_faction = int(display_faction)
+        except ValueError as e:
+            logging.error(e)
 
-                                theString += self.format_preformatted_string(pf, sFD, overlay=True)
 
-            # injects the html output into template
-            htmlOutput = OverlayTemplates().statshtml.format(
-                cssFilePath,
-                theString)
-            # create output overlay from template
-            with open(
-                "stats.html",
-                'w',
-                encoding="utf-8"
-            ) as outfile:
-                outfile.write(htmlOutput)
+        for match in MatchType:
+            for faction in Faction:
+                for value in player.stats.leaderboardData:
+                    ld = player.stats.leaderboardData[value]
+                    playerFaction = str(ld.faction)
+                    if (playerFaction == str(faction)):
+                        playerMatchtype = str(ld.matchType)
+                        if (playerMatchtype == str(match)):
+                            self.matchType = match
+                            player.faction = faction
+                            sFD = self.populate_string_formatting_dictionary(player, overlay=True)
+                            sFD.update(self.populate_image_formatting_dictionary(player))
 
-        except Exception as e:
-            logging.error(str(e))
-            logging.exception("Exception : ")
+                            if display_match_type == match.value or display_match_type == -1:
+
+                                if display_faction == faction.value or display_faction == -1:
+        
+                                    theString += self.format_preformatted_string(pf, sFD, overlay=True)
+
+        
+
+        # injects the html output into template
+        htmlOutput = OverlayTemplates().statshtml.format(
+            cssFilePath,
+            theString)
+        # create output overlay from template
+        with open(
+            "stats.html",
+            'w',
+            encoding="utf-8"
+        ) as outfile:
+            outfile.write(htmlOutput)
+
 
     @staticmethod
     def clear_stats_HTML():

@@ -5,7 +5,7 @@ import tkinter
 import logging
 
 from tkinter import (
-    BOTH, DISABLED, END, N, E, NORMAL, S, W, WORD, IntVar, Menu, StringVar, Tk, messagebox
+    BOTH, DISABLED, END, INSERT, N, E, NORMAL, S, W, WORD, IntVar, Menu, StringVar, Tk, messagebox
     )
 import tkinter.scrolledtext
 
@@ -120,12 +120,20 @@ class OptionsTwitchChat:
 
             my_label_frame = tkinter.LabelFrame(
                 self.frame_overlay_text,
-                padx=5,
-                pady=5)
+                padx=0,
+                pady=0,
+                background="gray62")
             self.frame.columnconfigure(
                 column_number)
             self.my_label_frames.append(my_label_frame)
-            my_label = tkinter.Label(my_label_frame, text=str(key), width=15)
+            my_label = tkinter.Button(
+                my_label_frame,
+                text=str(key),
+                width=14,
+                background="gray62")
+            my_label.bind(
+                '<Button-1>',
+                func=self.insert_text_at_cursor)
             my_label.grid()
 
             my_label_frame.grid(
@@ -229,6 +237,13 @@ class OptionsTwitchChat:
             command=self.edit_oauth_key)
         self.button_bot_OAuthKey.config(width=10)
         self.button_bot_OAuthKey.grid(sticky=E, row=1, column=2)
+
+    def insert_text_at_cursor(self, e : tkinter.Event = None):
+        button_text = e.widget.cget('text')
+        cursor_active_widget = self.parent_frame.focus_get()
+        if (isinstance(cursor_active_widget, tkinter.Entry)
+            or isinstance(cursor_active_widget, tkinter.Text)):
+            cursor_active_widget.insert(INSERT, button_text)
 
     def save_custom_chat_preformat(self):
         "saves custom chat preformat."

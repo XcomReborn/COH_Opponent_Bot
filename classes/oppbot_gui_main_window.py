@@ -30,8 +30,6 @@ from classes.oppbot_icon import Icon
 from classes.oppbot_game_data import GameData
 from classes.oppbot_memory_monitor import MemoryMonitor
 from classes.oppbot_gui_options_window import GUIOptionsWindow
-from classes.oppbot_player import Player
-from classes.oppbot_stats_request import StatsRequest
 from classes.oppbot_irc_client import IRC_Client
 from classes.oppbot_settings import Settings
 
@@ -308,85 +306,6 @@ class GUIMainWindow:
             column=1,
             pady=(0,5))
         
-        # Stat Request Frame
-        self.frame_stat_request = tkinter.Frame(
-            self.frame_overlay,
-        )
-        self.frame_stat_request.grid(
-            sticky=N+S+E+W,
-            columnspan=3
-        )
-        self.frame_stat_request.grid_rowconfigure(0, weight=1)
-        self.frame_stat_request.grid_columnconfigure(0, weight=1)
-        
-        # Label
-        self.label_stat_request = tkinter.Label(
-            self.frame_stat_request,
-            text="Request Stat For : "
-        )
-        self.label_stat_request.grid(
-            sticky=W,
-            row=0,
-            column=0
-        )
-        
-        # Steam Number Entry
-        self.entry_stat_request = tkinter.Entry(self.frame_stat_request, width=40)
-        self.entry_stat_request.grid(
-            sticky=W,
-            row=0,
-            column=1,
-            padx=(5,5)
-        )
-
-        steam_number = "Enter Your Steam Number Here (17 digits)"
-        if self.settings.data.get('stat_request_number'):
-            steam_number = self.settings.data.get('stat_request_number')
-        self.entry_stat_request.insert(0, steam_number)
-
-        self.entry_stat_request.config(state=DISABLED)
-
-
-        # Steam Number Entry Edit Button
-
-        self.button_stat_edit = tkinter.Button(
-            self.frame_stat_request,
-            text="Edit",
-            command=self.edit_stat_request
-        )
-        self.button_stat_edit.grid(
-            sticky=W,
-            row=0,
-            column=2
-        )
-        self.button_stat_edit.configure(width=10)
-
-        
-        # Display Stats Button
-
-        self.button_display_stats = tkinter.Button(
-            self.frame_stat_request,
-            text="Display Stats in Browser",
-            command=self.open_stats_browser)
-        
-        self.button_display_stats.config(width=20)
-        self.button_display_stats.grid(
-            sticky=W+E,
-            row=0,
-            column=3)
-                
-        # Clear Stats Button
-
-        self.clear_overlay_button = tkinter.Button(
-            self.frame_stat_request,
-            text="Clear Stats",
-            command=GameData.clear_stats_HTML)
-        
-        self.clear_overlay_button.config(width=10)
-        self.clear_overlay_button.grid(
-            sticky=E+W,
-            row=0,
-            column=4)
 
         # Console Output Frame
 
@@ -505,23 +424,6 @@ class GUIMainWindow:
     def open_overlay_browser():
         try:
             webbrowser.open("overlay.html", new=2)
-        except Exception as e:
-            logging.error(str(e))
-            logging.exception("Exception : ")
-
-    def open_stats_browser(self):
-        try:
-            # create gamedata
-            gamedata = GameData(tkconsole=self.txt_console)
-            # create a player object based on steamnumber
-            player = Player()
-            stats_request = StatsRequest()
-            stat = stats_request.return_stats(self.settings.data.get('stat_request_number'))
-            player.stats = stat
-            if stat:
-                player.name = stat.alias
-            gamedata.create_stats_html(player)
-            webbrowser.open("stats.html", new=2)
         except Exception as e:
             logging.error(str(e))
             logging.exception("Exception : ")
@@ -645,24 +547,7 @@ class GUIMainWindow:
         if bool(self.settings.data.get('enable_twitch_bot')):
             self.button_connect.config(state=NORMAL)
 
-    def edit_stat_request(self):
-        "edit stat request"
-        the_state = self.entry_stat_request.cget('state')
-        if(the_state == "disabled"):
-            self.entry_stat_request.config(state=NORMAL)
-        if(the_state == "normal"):
-            if self.check_steam_number(self.entry_stat_request.get()):
-                self.entry_stat_request.config(state=DISABLED)
-                self.enable_buttons()
-                steam64ID = self.entry_stat_request.get()
-                self.settings.data['stat_request_number'] = steam64ID
-                self.settings.save()
-                if self.coh_memory_monitor:
-                    self.coh_memory_monitor.settings = self.settings
-            else:
-                messagebox.showerror(
-                    "Invaid Steam Number", "Please enter your steam number\n"
-                    "It Should be an integer 17 characters long")
+
 
     def edit_steam_number(self):
         "edit steam number."

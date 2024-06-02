@@ -5,12 +5,16 @@ import tkinter
 import logging
 
 from tkinter import (
-    DISABLED, END, N, E, NORMAL, S, W, WORD, IntVar, Menu, StringVar, Tk, messagebox
+    DISABLED, END, INSERT, N, E, NORMAL, S, W, WORD, IntVar, Menu, StringVar, Tk, messagebox
     )
 from tkinter import ttk
 import tkinter.scrolledtext
+import webbrowser
 
+from classes.oppbot_game_data import GameData
+from classes.oppbot_player import Player
 from classes.oppbot_settings import Settings
+from classes.oppbot_stats_request import StatsRequest
 
 class OptionsOverlay:
     "Graphical User Interface Options Window for the COH Opponent Bot."
@@ -63,7 +67,7 @@ class OptionsOverlay:
 
         self.frame_overlay_text = tkinter.LabelFrame(
             self.frame,
-            text="Text Variables",
+            text="Overlay Variables",
             padx=5,
             pady=5
             )
@@ -76,16 +80,28 @@ class OptionsOverlay:
         row_number = 0
 
         sfd = self.settings.stringFormattingDictionary
+
+        row_number = 0
+        column_number = 0
+
         for key, value in sfd.items():
 
             my_label_frame = tkinter.LabelFrame(
                 self.frame_overlay_text,
-                padx=5,
-                pady=5)
+                padx=0,
+                pady=0,
+                background="gray62")
             self.frame.columnconfigure(
                 column_number)
             self.my_label_frames.append(my_label_frame)
-            my_label = tkinter.Label(my_label_frame, text=str(key), width=15)
+            my_label = tkinter.Button(
+                my_label_frame,
+                text=str(key),
+                width=14,
+                background="gray62")
+            my_label.bind(
+                '<Button-1>',
+                func=self.insert_text_at_cursor)
             my_label.grid()
 
             my_label_frame.grid(
@@ -93,43 +109,44 @@ class OptionsOverlay:
                 column=column_number,
                 sticky=N + W + E)
             column_number += 1
-            if column_number > 5:
+            if column_number > 7:
                 row_number += 1
                 column_number = 0
             self.string_format_labels.append(my_label)
 
-        self.frame_overlay_image_icons = tkinter.LabelFrame(
-            self.frame,
-            text="HTML Overlay Only Image Icons",
-            padx=5,
-            pady=5)
-        self.frame_overlay_image_icons.grid(sticky=N+W+E)
-
-        # create all custom icon variables from dictionary keys
-
-        column_number = 0
-        row_number = 0
         iofd = self.settings.imageOverlayFormattingDictionary.items()
+
+        # Create image preformat keys
+
         for key, value in iofd:
 
             my_label_frame = tkinter.LabelFrame(
-                self.frame_overlay_image_icons,
-                padx=5,
-                pady=5)
-            self.frame_overlay_image_icons.columnconfigure(
-                column_number)
-            self.my_label_frames.append(my_label_frame)
-            my_label = tkinter.Label(my_label_frame, text=str(key), width=15)
-            my_label.grid()
-
+                self.frame_overlay_text,
+                padx=0,
+                pady=0,
+                background="skyblue1")
+            
             my_label_frame.grid(
                 row=row_number,
                 column=column_number,
                 sticky=N + W + E)
+
             column_number += 1
-            if column_number > 6:
+            if column_number > 7:
                 row_number += 1
                 column_number = 0
+
+            self.my_label_frames.append(my_label_frame)
+            my_label = tkinter.Button(
+                my_label_frame,
+                text=str(key),
+                width=14,
+                background="skyblue1")
+            my_label.bind(
+                '<Button-1>',
+                func=self.insert_text_at_cursor)
+            my_label.grid()
+
             self.string_format_labels.append(my_label)
 
         self.check_clear_overlay_after_game = tkinter.Checkbutton(
@@ -557,6 +574,235 @@ class OptionsOverlay:
         self.button_css_custom_path.config(width=10)
         self.button_css_custom_path.grid(row=3, column=2, sticky=W)
 
+        # Stat Request Frame
+        self.frame_stat_request = tkinter.LabelFrame(
+            self.frame,
+            text="Stats Display Options"
+        )
+        self.frame_stat_request.grid(
+            sticky=N+S+E+W,
+            columnspan=3
+        )
+        self.frame_stat_request.grid_rowconfigure(0, weight=1)
+        self.frame_stat_request.grid_columnconfigure(0, weight=1)
+        
+        # Label
+        self.label_stat_request = tkinter.Label(
+            self.frame_stat_request,
+            text="Request Stat For : "
+        )
+        self.label_stat_request.grid(
+            sticky=W,
+            row=0,
+            column=0)
+        
+        # Steam Number Entry
+        self.entry_stat_request = tkinter.Entry(self.frame_stat_request, width=40)
+        self.entry_stat_request.grid(
+            sticky=W,
+            row=0,
+            column=1,
+            padx=(5,5))
+
+        steam_number = "Enter Your Steam Number Here (17 digits)"
+        if self.settings.data.get('stat_request_number'):
+            steam_number = self.settings.data.get('stat_request_number')
+        self.entry_stat_request.insert(0, steam_number)
+
+        self.entry_stat_request.config(state=DISABLED)
+
+
+        # Steam Number Entry Edit Button
+
+        self.button_stat_edit = tkinter.Button(
+            self.frame_stat_request,
+            text="Edit",
+            command=self.edit_stat_request
+        )
+        self.button_stat_edit.grid(
+            sticky=W,
+            row=0,
+            column=2
+        )
+        self.button_stat_edit.configure(width=10)
+
+        
+        # Display Stats Button
+
+        self.button_display_stats = tkinter.Button(
+            self.frame_stat_request,
+            text="Display Stats in Browser",
+            command=self.open_stats_browser)
+        
+        self.button_display_stats.config(width=20)
+        self.button_display_stats.grid(
+            sticky=W+E,
+            row=3,
+            column=3)
+                
+        # Clear Stats Button
+
+        self.clear_overlay_button = tkinter.Button(
+            self.frame_stat_request,
+            text="Clear Stats",
+            command=GameData.clear_stats_HTML)
+        
+        self.clear_overlay_button.config(width=10)
+        self.clear_overlay_button.grid(
+            sticky=E+W,
+            row=3,
+            column=4)
+        
+        # Label
+        self.label_match_type = tkinter.Label(
+            self.frame_stat_request,
+            text="Match Type : "
+        )
+        self.label_match_type.grid(
+            sticky=W,
+            row=1,
+            column=0)        
+        
+        # Drop down combox box for Match Type
+        match_types = ["All",
+                       "Custom",
+                       "1v1",
+                       "2v2",
+                       "3v3",
+                       "4v4",
+                       "Team 2v2",
+                       "Team 3v3",
+                       "Team 4v4",
+                       "Assault 2v2",
+                       "Assault Team 2v2",
+                       "Assault Team 3v3",
+                       "Panzerkrieg 2v2",
+                       "Panzerkrieg Team 2v2",
+                       "Panzerkrieg Team 3v3",
+                       "Compstomp",
+                       "Assault",
+                       "Panzerkrieg",
+                       "Stonewall"]
+
+        self.combo_match_type = ttk.Combobox(
+            self.frame_stat_request,
+            state="readonly",
+            values=match_types)
+        # Drop down combox box for faction
+        self.combo_match_type.grid(
+            sticky=N+S+E+W,
+            row=1,
+            column=1)
+        # set current option
+        self.combo_match_type.current(0)
+        current_match_type = self.settings.data.get("display_match_type")
+        if current_match_type:
+            try:
+                current_index = int(current_match_type) + 1
+            except ValueError:
+                current_index = 0
+            self.combo_match_type.current(current_index)
+
+        self.combo_match_type.bind(
+            "<<ComboboxSelected>>",
+            self.combo_selection_changed)
+        
+        # Label
+        self.label_faction = tkinter.Label(
+            self.frame_stat_request,
+            text="Faction : "
+        )
+        self.label_faction.grid(
+            sticky=W,
+            row=2,
+            column=0)
+        
+        # Drop down combox box for Match Type
+        factions = ["All",
+                    "US",
+                    "Whermacht",
+                    "Commonweath",
+                    "Panzer Elite"]
+
+        self.combo_factions = ttk.Combobox(
+            self.frame_stat_request,
+            state="readonly",
+            values=factions)
+        # Drop down combox box for faction
+        self.combo_factions.grid(
+            sticky=N+S+E+W,
+            row=2,
+            column=1)
+        # set current option
+        self.combo_factions.current(0)
+        current_faction = self.settings.data.get("display_faction")
+        if current_faction:
+            try:
+                current_index = int(current_faction) + 1
+            except ValueError:
+                current_index = 0
+            self.combo_factions.current(current_index)
+
+        self.combo_factions.bind(
+            "<<ComboboxSelected>>",
+            self.combo_selection_changed)
+
+    def insert_text_at_cursor(self, e : tkinter.Event = None):
+        "inserting current button text at active text cursor."
+        button_text = e.widget.cget('text')
+        cursor_active_widget = self.parent_frame.focus_get()
+        if isinstance(cursor_active_widget, tkinter.Entry) or isinstance(cursor_active_widget, tkinter.Text):
+            cursor_active_widget.insert(INSERT, button_text)
+
+    def center_window(self):
+        width = self.frame.winfo_width()
+        height = self.frame.winfo_height()
+        x = (self.parent_frame.winfo_screenwidth() // 2) - (width //2)
+        y = (self.parent_frame.winfo_screenheight() // 2) - (height//2)
+        self.parent_frame.geometry(f'{width}x{height}+{x}+{y}')
+
+
+    def combo_selection_changed(self, e : tkinter.Event = None):
+        self.settings.data['display_match_type'] = self.combo_match_type.current() - 1
+        self.settings.data['display_faction'] = self.combo_factions.current() - 1
+        self.settings.save()
+        if self.main_window.coh_memory_monitor:
+            self.main_window.coh_memory_monitor.settings = self.settings
+
+    def edit_stat_request(self):
+        "edit stat request"
+        the_state = self.entry_stat_request.cget('state')
+        if(the_state == "disabled"):
+            self.entry_stat_request.config(state=NORMAL)
+        if(the_state == "normal"):
+            if self.main_window.check_steam_number(self.entry_stat_request.get()):
+                self.entry_stat_request.config(state=DISABLED)
+                steam64ID = self.entry_stat_request.get()
+                self.settings.data['stat_request_number'] = steam64ID
+                self.settings.save()
+                if self.main_window.coh_memory_monitor:
+                    self.main_window.coh_memory_monitor.settings = self.settings
+            else:
+                messagebox.showerror(
+                    "Invaid Steam Number", "Please enter your steam number\n"
+                    "It Should be an integer 17 characters long")
+
+
+    def open_stats_browser(self):
+        "Creates webpage layout according to options."
+        # create gamedata
+        gamedata = GameData(
+            tkconsole=self.main_window.txt_console,
+            settings=self.settings)
+        # create a player object based on steamnumber
+        player = Player()
+        stats_request = StatsRequest()
+        stat = stats_request.return_stats(self.settings.data.get('stat_request_number'))
+        player.stats = stat
+        if stat:
+            player.name = stat.alias
+        gamedata.create_stats_html(player)
+        webbrowser.open("stats.html", new=2)
 
 
     def mirror_left_right_entry(self, entry : tkinter.Entry):

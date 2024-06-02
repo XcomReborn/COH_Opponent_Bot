@@ -104,6 +104,8 @@ class Settings:
         temp = os.path.normpath("styles/overlay_display_style.css")
         self.data['css_style_display'] = temp
 
+        self.data['display_match_type'] = "All"
+        self.data['display_faction'] = "All"
 
 
         temp = (
@@ -228,8 +230,9 @@ class Settings:
         self.stringFormattingDictionary['$WLRATIO$'] = None
 
         self.stringFormattingDictionary['$MATCHTYPE$'] = None
-        self.stringFormattingDictionary['$COHSTATSLINK$'] = None
         self.stringFormattingDictionary['$STEAMPROFILE$'] = None
+        self.stringFormattingDictionary['$COHSTATSLINK$'] = None
+
 
         self.imageOverlayFormattingDictionary = {}
         self.imageOverlayFormattingDictionary['$FLAGICON$'] = None
