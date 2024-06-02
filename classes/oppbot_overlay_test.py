@@ -81,7 +81,7 @@ class OverlayTest:
     def test_default(self):
         # create gamedata
         gamedata = GameData(settings=self.settings)
-        gamedata.matchType = MatchType.FOURS
+        gamedata.matchType = MatchType.COMPSTOMP
         gamedata.automatch = False
         # create a player object based on steamnumber
         playerList = self.create_players(numberOfPlayers=8)
