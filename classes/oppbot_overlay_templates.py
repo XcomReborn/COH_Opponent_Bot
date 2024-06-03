@@ -71,7 +71,6 @@ class OverlayTemplates:
     overlaycss = """
 
 
-
 body {
     position: relative;
     background-color: transparent;
@@ -249,7 +248,7 @@ top: 0pt;
 .opponentTeam {
 
       position : absolute;
-      top: 0pt;
+      top: 3pt;
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
       float: left;
@@ -267,7 +266,7 @@ color: white;
 .playerTeam {
 
       position: relative;
-      top: 0pt;
+      top: 2pt;
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
       float: right;
@@ -296,10 +295,71 @@ color: white;
 
   }
 
-  .playerTeam .name{
+.US{
 
-    color: white;
+}
+.WM{
+
+}
+.PE{
+
+}
+.CW{
 
 }
 
+.CUSTOM{
+
+}
+.ONES{
+
+}
+.TWOS{
+
+}
+.THREES{
+
+}
+.FOURS{
+
+} 
+.TEAM_2v2{
+
+}
+.TEAM_3V3 {
+
+}
+.TEAM_4V4 {
+
+}
+.ASSAULT_2V2 {
+
+}
+.ASSAULT_TEAM_2V2 {
+
+}
+.ASSAULT_TEAM_3V3 {
+
+}
+.PANZERKRIEG_2v2 {
+
+}
+.PANZERKRIEG_TEAM_2v2 {
+
+}
+.PANZERKRIEG_TEAM_3v3 {
+
+}
+.COMPSTOMP {
+
+}
+.ASSAULT {
+
+}
+.PANZERKRIEG  {
+
+}
+.STONEWALL {
+
+} 
     """
