@@ -65,6 +65,7 @@ class StatsRequest:
             rs = pd.get('relicServerProxyStatRequest')
             rs += str(steam64ID)
             rs += f"&steamNumber={self.settings.data.get('steamNumber')}"
+            rs += f"&version={self.settings.data.get('version_number')}"
             response = urllib.request.urlopen(rs).read()
             # Decode server response as a json into a
             # nested list/directory and store as instance variable
@@ -88,7 +89,7 @@ class StatsRequest:
             pd = self.settings.privatedata
             rs = pd.get('relicServerProxyLeaderBoards')
             rs += f"&steamNumber={self.settings.data.get('steamNumber')}"
-            #print(rs)
+            rs += f"&version={self.settings.data.get('version_number')}"
             response = urllib.request.urlopen(rs).read()
             #print(response)
             # Decode server response as a json into
