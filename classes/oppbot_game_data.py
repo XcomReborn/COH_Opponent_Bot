@@ -1132,6 +1132,7 @@ class GameData():
                         sfDict,
                         overlay=True
                     )
+                    theString = f'<div class = "{item.faction.name}">{theString}</div>'
                     team1 += str(theString)
 
                 for item in team2List:
@@ -1163,6 +1164,7 @@ class GameData():
                         sfDict,
                         overlay=True
                     )
+                    theString = f'<div class = "{item.faction.name}">{theString}</div>'
                     team2 += str(theString)
             else:
 
@@ -1181,7 +1183,9 @@ class GameData():
                 self.matchType.value > 8):
                     cssFilePath = self.settings.data.get('css_style_custom')
 
-
+            # add match type div surrounding each team
+            team1 = f'<div class = "{self.matchType.name}">{team1}</div>'
+            team2 = f'<div class = "{self.matchType.name}">{team2}</div>'
 
             # check if css file exists
             # and if not output the default template to folder
