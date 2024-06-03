@@ -1,20 +1,10 @@
 
 
+body {}
 
+html {}
 
-body {
-
-
-  }
-
-html {
-
-}
-
-.container{
-
-
-}
+.container{}
 
 .countryflagimg{
     position: relative;
@@ -156,4 +146,37 @@ html {
 
   }
 
-    
+.US{
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.WM{
+    background-color: rgba(255, 0, 0, 0.5);
+}
+
+.PE{
+    background-color: rgba(17, 0, 255, 0.5);
+}
+
+.CW{
+    background-color: rgba(0, 255, 0, 0.5);
+}
+
+.CUSTOM{}
+.ONES{}
+.TWOS{}
+.THREES{}
+.FOURS{} 
+.TEAM_2v2{}
+.TEAM_3V3 {}
+.TEAM_4V4 {}
+.ASSAULT_2V2 {}
+.ASSAULT_TEAM_2V2 {}
+.ASSAULT_TEAM_3V3 {}
+.PANZERKRIEG_2v2 {}
+.PANZERKRIEG_TEAM_2v2 {}
+.PANZERKRIEG_TEAM_3v3 {}
+.COMPSTOMP {}
+.ASSAULT {}
+.PANZERKRIEG  {}
+.STONEWALL {} 

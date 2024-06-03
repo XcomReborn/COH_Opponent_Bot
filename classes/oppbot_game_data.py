@@ -1278,9 +1278,18 @@ class GameData():
 
                             if display_match_type == match.value or display_match_type == -1:
 
+                                match_type_div = f'<div class = "{match.name}">'
+
                                 if display_faction == faction.value or display_faction == -1:
+
+                                    faction_type_div = f'<div class = "{faction.name}">'
+
+                                    theString += match_type_div
+                                    theString += faction_type_div
         
                                     theString += self.format_preformatted_string(pf, sFD, overlay=True)
+
+                                    theString += "</div></div>"
 
         
 
