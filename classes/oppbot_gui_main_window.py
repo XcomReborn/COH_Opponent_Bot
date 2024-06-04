@@ -191,7 +191,7 @@ class GUIMainWindow:
 
         self.tooltip_connect_button = ToolTip(
             self.button_connect,
-            msg="Press to connect to twitch. (optional)", 
+            msg="Press to connect to twitch. (optional)",
             delay=1)
 
         # Options Button

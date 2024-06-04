@@ -11,6 +11,9 @@ from tkinter import ttk
 import tkinter.scrolledtext
 import webbrowser
 
+from tktooltip import ToolTip
+from tkinter import ttk
+
 from classes.oppbot_game_data import GameData
 from classes.oppbot_overlay_test import OverlayTest
 from classes.oppbot_player import Player
@@ -678,9 +681,10 @@ class OptionsOverlay:
         
         # Display Stats Button
 
-        self.button_display_stats = tkinter.Button(
+        self.button_display_stats = ttk.Button(
             self.frame_stat_request,
             text="Display Stats in Browser",
+            style='Overlay.TButton',
             command=self.open_stats_browser)
         
         self.button_display_stats.config(width=20)
@@ -688,6 +692,13 @@ class OptionsOverlay:
             sticky=W+E,
             row=3,
             column=3)
+        
+        # Connect Button Tool Tip
+
+        self.tooltip_connect_button = ToolTip(
+            self.button_display_stats,
+            msg="Show selected stats in your web-browser.",
+            delay=1)
                 
         # Clear Stats Button
 
