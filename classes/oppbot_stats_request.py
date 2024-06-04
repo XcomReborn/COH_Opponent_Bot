@@ -27,7 +27,10 @@ class StatsRequest:
     def return_stats(self, steam64ID) -> PlayerStat:
         try:
             self.get_user_stat_from_server(steam64ID)
+            # attempt to get leaderboards from file in data folder
             self.get_available_leaderboards_from_file()
+            if not self.availableLeaderboards:
+                self.get_available_leaderboards_from_server()
             # Determine server response succeeded
             # and use it to create PlayerStat object
             result = None
