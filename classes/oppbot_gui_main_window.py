@@ -24,6 +24,8 @@ from tkinter import (
 
 from tkinter.ttk import Style
 from tkinter import ttk
+from tktooltip import ToolTip
+
 from queue import Queue
 
 from classes.oppbot_icon import Icon
@@ -185,6 +187,13 @@ class GUIMainWindow:
         else:
             self.button_connect.configure(state=DISABLED)
 
+        # Connect Button Tool Tip
+
+        self.tooltip_connect_button = ToolTip(
+            self.button_connect,
+            msg="Press to connect to twitch. (optional)", 
+            delay=1)
+
         # Options Button
 
         self.button_options = tkinter.Button(
@@ -291,6 +300,15 @@ class GUIMainWindow:
             font='calibri',
             size=10,
             foreground='blue')
+        
+        # Tooltip Overlay Button
+
+        self.tooltip_overlay_button = ToolTip(
+            self.button_open_overlay,
+            msg="Display Overlay in your Web-browser, will be blank \n"
+                "until a the COH game has started.",
+                delay=1
+        )
 
         # Clear Overlay Button
 
