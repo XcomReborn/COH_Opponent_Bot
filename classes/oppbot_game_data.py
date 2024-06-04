@@ -573,13 +573,22 @@ class GameData():
 
         # Check for server contact, if denied do not output anything
         stat_request = StatsRequest()
-        result = stat_request.get_available_leaderboards_from_server()
-        if not result:
-            if self.tkconsole:
+        stat_request.return_stats(self.settings.data.get('steamNumber'))
+        if stat_request.info:
+            if "DENIED" in stat_request.info:
                 message = "Unable to get data from the relic server."
                 self.send_to_tkconsole(message)
+                print(stat_request.reason)
+                if stat_request.reason:
+                    self.send_to_tkconsole(stat_request.reason)
+                if stat_request.message:
+                    self.send_to_tkconsole(stat_request.message)
                 logging.error(message)
-            return False
+                return False
+            if "OUTOFDATE" in stat_request.info:
+                if stat_request.message:
+                    self.send_to_tkconsole(stat_request.message)
+                    logging.info(stat_request.message)
 
         # Prepare outputs
         axis_team = []

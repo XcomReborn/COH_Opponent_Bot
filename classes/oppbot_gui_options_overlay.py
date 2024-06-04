@@ -858,6 +858,22 @@ class OptionsOverlay:
         player = Player()
         stats_request = StatsRequest()
         stat = stats_request.return_stats(self.settings.data.get('stat_request_number'))
+        if stats_request.info:
+            if "DENIED" in stats_request.info:
+                message = "Unable to get data from the relic server."
+                self.main_window.send_to_tkconsole(message)
+                print(stats_request.reason)
+                if stats_request.reason:
+                    self.main_window.send_to_tkconsole(stats_request.reason)
+                if stats_request.message:
+                    self.main_window.send_to_tkconsole(stats_request.message)
+                logging.error(message)
+                return False
+            if "OUTOFDATE" in stats_request.info:
+                if stats_request.message:
+                    self.main_window.send_to_tkconsole(stats_request.message)
+                    logging.info(stats_request.message)
+
         player.stats = stat
         if stat:
             player.name = stat.alias

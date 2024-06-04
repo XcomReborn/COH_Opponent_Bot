@@ -457,6 +457,27 @@ class GUIMainWindow:
         command=lambda: w.event_generate("<<Paste>>"))
         self.the_menu.tk.call("tk_popup", self.the_menu, e.x_root, e.y_root)
 
+    def send_to_tkconsole(self, message):
+        "Sends a message to the output field of the GUI."
+
+        try:
+            # First strip characters outside of range
+            # that cannot be handled by tkinter output field
+            char_list = ''
+            for x in range(len(message)):
+                if ord(message[x]) in range(65536):
+                    char_list += message[x]
+            message = char_list
+        except Exception as e:
+            logging.error(str(e))
+            logging.exception("Exception : ")
+        try:
+            if self.txt_console:
+                self.txt_console.insert(END, message + "\n")
+        except Exception as e:
+            logging.error(str(e))
+            logging.exception("Exception : ")
+
     def send_to_chat(self, e = None):
         "send to chat."
         if self.irc_twitch_client:
