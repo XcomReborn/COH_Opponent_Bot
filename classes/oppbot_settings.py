@@ -104,8 +104,8 @@ class Settings:
         temp = os.path.normpath("styles/overlay_display_style.css")
         self.data['css_style_display'] = temp
 
-        self.data['display_match_type'] = "All"
-        self.data['display_faction'] = "All"
+        self.data['display_match_type'] = -1
+        self.data['display_faction'] = -1
 
 
         temp = (
