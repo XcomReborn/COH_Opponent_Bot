@@ -862,7 +862,6 @@ class OptionsOverlay:
             if "DENIED" in stats_request.info:
                 message = "Unable to get data from the relic server."
                 self.main_window.send_to_tkconsole(message)
-                print(stats_request.reason)
                 if stats_request.reason:
                     self.main_window.send_to_tkconsole(stats_request.reason)
                 if stats_request.message:
@@ -884,7 +883,7 @@ class OptionsOverlay:
         # create gamedata
 
         if label:
-            overlay_test = OverlayTest(settings=self.settings)
+            overlay_test = OverlayTest(settings=self.settings, main_window=self.main_window)
 
             if "Default" in label.cget("text"):
                 overlay_test.test_default()

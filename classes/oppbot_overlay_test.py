@@ -1,5 +1,4 @@
-import tkinter
-import webbrowser
+import logging
 
 from classes.oppbot_faction import Faction
 from classes.oppbot_game_data import GameData
@@ -10,8 +9,9 @@ from classes.oppbot_stats_request import StatsRequest
 
 class OverlayTest:
     
-    def __init__(self, settings = None) -> None:
+    def __init__(self, settings = None, main_window = None) -> None:
         self.settings = settings
+        self.main_window = main_window
 
     def create_players(self, numberOfPlayers = 8) -> Player:
         playerList = []
@@ -19,6 +19,24 @@ class OverlayTest:
         stats_request = StatsRequest()
         stat = stats_request.return_stats(
             self.settings.data.get('stat_request_number'))
+        if stats_request.info:
+            if "DENIED" in stats_request.info:
+                message = "Unable to get data from the relic server."
+                if self.main_window:
+                    self.main_window.send_to_tkconsole(message)
+                if stats_request.reason:
+                    if self.main_window:
+                        self.main_window.send_to_tkconsole(stats_request.reason)
+                if stats_request.message:
+                    if self.main_window:
+                        self.main_window.send_to_tkconsole(stats_request.message)
+                logging.error(message)
+                return False
+            if "OUTOFDATE" in stats_request.info:
+                if stats_request.message:
+                    if self.main_window:
+                        self.main_window.send_to_tkconsole(stats_request.message)
+                    logging.info(stats_request.message)
 
         player_1 = Player()
         player_1.name = "Test Player 1"
