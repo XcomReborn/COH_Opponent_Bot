@@ -4,6 +4,7 @@ import os
 import ssl
 import urllib
 
+from classes.oppbot_leaderboard_data import LeaderboardData
 from classes.oppbot_settings import Settings
 from classes.oppbot_player_stat import PlayerStat
 
@@ -27,10 +28,14 @@ class StatsRequest:
     def return_stats(self, steam64ID) -> PlayerStat:
         try:
             self.get_user_stat_from_server(steam64ID)
+            # get leaderboard data from class
+            lbd = LeaderboardData()
+            self.availableLeaderboards = lbd.leaderboard
             # attempt to get leaderboards from file in data folder
-            self.get_available_leaderboards_from_file()
             if not self.availableLeaderboards:
-                self.get_available_leaderboards_from_server()
+                self.get_available_leaderboards_from_file()
+                if not self.availableLeaderboards:
+                    self.get_available_leaderboards_from_server()
             # Determine server response succeeded
             # and use it to create PlayerStat object
             result = None
