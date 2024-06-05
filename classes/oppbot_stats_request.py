@@ -31,11 +31,6 @@ class StatsRequest:
             # get leaderboard data from class
             lbd = LeaderboardData()
             self.availableLeaderboards = lbd.leaderboard
-            # attempt to get leaderboards from file in data folder
-            if not self.availableLeaderboards:
-                self.get_available_leaderboards_from_file()
-                if not self.availableLeaderboards:
-                    self.get_available_leaderboards_from_server()
             # Determine server response succeeded
             # and use it to create PlayerStat object
             result = None
@@ -97,7 +92,7 @@ class StatsRequest:
             logging.exception("Exception : ")
 
     def get_available_leaderboards_from_server(self) -> bool:
-        "Cache the available leaderboards."
+        "Cache the available leaderboards. Deprecated"
 
         try:
             if not os.environ.get('PYTHONHTTPSVERIFY', ''):
@@ -129,7 +124,7 @@ class StatsRequest:
             logging.exception("Exception : ")
 
     def get_available_leaderboards_from_file(self):
-        "load the available leaderboards from file."
+        "load the available leaderboards from file. Deprecated."
         with open('data/available_leaderboards.json', encoding='utf-8') as f:
             self.availableLeaderboards = json.load(f)
 

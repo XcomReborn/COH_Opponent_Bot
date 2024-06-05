@@ -10,6 +10,5 @@ IF EXIST dist\coh_opponent_bot.zip DEL /F dist\coh_opponent_bot.zip
 winrar a -ep -afzip dist\coh_opponent_bot dist\coh_opponent_bot.exe
 winrar a -ep -afzip dist\coh_opponent_bot overlay.html 
 winrar a -r -afzip dist\coh_opponent_bot overlay_images\*.png styles\overlay_style.css styles\overlay_display_style.css
-winrar a -r -afzip dist\coh_opponent_bot data\*.json
 del dist\coh_opponent_bot.exe
 pause 
