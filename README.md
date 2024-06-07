@@ -1,5 +1,7 @@
 # COH_Opponent_Bot
 
+![Version_v5-0k](https://github.com/XcomReborn/COH_Opponent_Bot/assets/4015491/413be163-d795-4b3c-aee0-897ba9786604)
+
 
 General information and how it works:
 
