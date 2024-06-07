@@ -1,5 +1,7 @@
 # COH_Opponent_Bot
 
+Current Version : 
+
 ![Version_v5-0k](https://github.com/XcomReborn/COH_Opponent_Bot/assets/4015491/413be163-d795-4b3c-aee0-897ba9786604)
 
 
@@ -99,15 +101,22 @@ twitch chat options menu.
 
 # To use the overlay in OBS:
 
+![Example5](https://github.com/XcomReborn/COH_Opponent_Bot/assets/4015491/f5d85233-3bc0-4a0f-b637-0036025211aa)
+
 Prerequisite : https://obsproject.com/ (download from here, requires the browser plugin - default in the windows version)
 
-1. Create a new source of type browser.
+![Example8](https://github.com/XcomReborn/COH_Opponent_Bot/assets/4015491/bc7ff4ed-9e33-4a84-a50e-90f0ff893aba)
+
+![Example7](https://github.com/XcomReborn/COH_Opponent_Bot/assets/4015491/513065a3-a254-48ed-881f-a7157ebd1ff2)
+
+1. Create a new source of type browser.   
 2. Set the size of the browser to the size of your stream output (eg: 1920 width x 1080 height)
 3. Tick the box for using local file.
 4. Setting the use custom frame rate tick box to true (on) and entering a frame rate of 2 in the FPS field will prevent the overlay from flickering.
 5. Use the file browse button to point the browser at local file overlay.html in the programs base directory. (if overlay.html doesn't exist, run the program once and press test, this will create one)
-6. If the created source doesn't fill the preview screen (it should if you set the resolution correctly) expand the source to overlay/cover the entire preview screen.
-7. Done.
+7. If the created source doesn't fill the preview screen (it should if you set the resolution correctly) expand the source to overlay/cover the entire preview screen.
+
+![Example9](https://github.com/XcomReborn/COH_Opponent_Bot/assets/4015491/137b6a7b-d36a-4035-be73-8123b4d97827)
 
 - The next time you get an opponent or type !opp in your connected twitch chat during a game the overlay will show the opponents.
 - The overlay custom output preformat string can be set in the overlay options menu.
