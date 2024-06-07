@@ -701,6 +701,7 @@ class GameData():
         wlRatioDiv = ""
         steamprofile = ""
         cohstatslink = ""
+        steamid = ""
 
         if overlay:
             nameDiv = '<div class = "name">'
@@ -720,6 +721,7 @@ class GameData():
             wlRatioDiv = '<div class = "wlratio">'
             steamprofile = '<div class = "steamprofile">'
             cohstatslink = '<div class = "cohstatslink">'
+            steamid = '<div class = "steamid">'
 
         playerName = self.sanatize_user_name(player.name)
         if not playerName:
@@ -808,6 +810,11 @@ class GameData():
 
             stringFormattingDictionary['$COHSTATSLINK$'] = (
                 prefixDiv + cohstatslink + str(player.stats.cohstatsLink) +
+                postfixDivClose + postfixDivClose
+            )
+
+            stringFormattingDictionary['$STEAMID$'] = (
+                prefixDiv + steamid + str(player.stats.steamNumber) +
                 postfixDivClose + postfixDivClose
             )
 

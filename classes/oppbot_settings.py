@@ -232,6 +232,7 @@ class Settings:
         self.stringFormattingDictionary['$MATCHTYPE$'] = None
         self.stringFormattingDictionary['$STEAMPROFILE$'] = None
         self.stringFormattingDictionary['$COHSTATSLINK$'] = None
+        self.stringFormattingDictionary['$STEAMID$'] = None
 
 
         self.imageOverlayFormattingDictionary = {}

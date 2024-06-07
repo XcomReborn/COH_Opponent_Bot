@@ -138,6 +138,12 @@ html {}
     display: inline;
 }
 
+.steamid {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
 
 .playerStats {
 

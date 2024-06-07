@@ -176,6 +176,12 @@ display: inline;
 top: 0pt;
 }
 
+.steamid {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
 .opponentTeam {
 
       position : absolute;
