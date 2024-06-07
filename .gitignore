@@ -14,6 +14,7 @@
 dist/
 build/
 .vscode/
+data/
 
 overlay.html
 stats.html
