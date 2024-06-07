@@ -105,10 +105,11 @@ twitch chat options menu.
 
 Prerequisite : https://obsproject.com/ (download from here, requires the browser plugin - default in the windows version)
 
-1. Create a new source of type browser.
-
 ![Example8](https://github.com/XcomReborn/COH_Opponent_Bot/assets/4015491/bc7ff4ed-9e33-4a84-a50e-90f0ff893aba)
-   
+
+![Example7](https://github.com/XcomReborn/COH_Opponent_Bot/assets/4015491/513065a3-a254-48ed-881f-a7157ebd1ff2)
+
+1. Create a new source of type browser.   
 2. Set the size of the browser to the size of your stream output (eg: 1920 width x 1080 height)
 3. Tick the box for using local file.
 4. Setting the use custom frame rate tick box to true (on) and entering a frame rate of 2 in the FPS field will prevent the overlay from flickering.
