@@ -21,38 +21,6 @@ The program also contacts the relic statistic rank server via a proxy and gets d
 It is for use with COH 1 only. (And only for Windows, tested only on Windows 10) because it relies on reading windows memory.
 
 
-# Usage
-
-
-To execute it from source code:
-
-Download all files in the repo then:
-
-From the command line in the appropriate directory use. "python coh_opponent_bot.py"
-
-Currently built with:<br>
-<br>
-python version 3.12.0<br>
-PyInstaller version 6.7.0<br>
-<br>
-Python Dependencies :<br>
-<br>
-requests version 2.31.0<br>
-mem_edit version 0.7<br>
-pymem version 1.13.0<br>
-<br>
-These can be installed using pip <br>
-<br>
-"pip install pyinstaller"<br>
-"pip install requests"<br>
-"pip install mem_edit"<br>
-"pip install pymem"<br>
-<br>
-On Windows you can compile a single executable using pyinstaller, the commands can be executed in the build.bat batch file.
-pyinstaller has a nasty habit of producing programs that immediately get flagged as a virus by windows anti virus.
-An exception must be added the the windows defender in order to use the program as an .exe or it will most likely be automatically 
-quarantined by the operating system. 
-
 # A precompiled windows 10 compatible executable can be downloaded :
 
 HERE : https://github.com/XcomReborn/COH_Opponent_Bot/releases
@@ -62,8 +30,10 @@ To use the executable:
 1. Download the zip file and decompress (unzip) it into a new folder.
 1. Execute the main file (coh_opponent_bot.exe) by double clicking on the icon.
 2. Check the information is correct, if not edit the fields using the buttons with your steam user name, your Steam64ID*, and location of the game.
-3. Optionally enter your twitch channel in the twitch options and press the Connect button.
-4. When the game is running : Any user typing "opponent" or "!opponent" or "!opp" or "opp" in chat will trigger the bot to find you opponents name, steam profile and COH stats.
+3. Optional : Check Options for overlay; test overlay with test buttons or display stats button.
+4. Optional : Enter your twitch channel in the twitch options and press the Connect button.
+5. When the game is running overlay will show the teams automatically 
+6. Optional : Any user typing "opponent" or "!opponent" or "!opp" or "opp" in chat will trigger the bot to find you opponents name, steam profile and COH stats; output it to chat and update overlay.
 
 See all available options in the options menu in the graphical user interface of the program.
 
@@ -83,7 +53,6 @@ IF NOT:
   4.  Now click on your Steam Profile Name and select View Profile
 
 Alternatively, visit https://steamid.co/ and enter your steam account name if your ID number doesn't show up in the steam client URL
-
 
 
 # Twitch TV Chat Bot Commands
@@ -121,6 +90,39 @@ Prerequisite : https://obsproject.com/ (download from here, requires the browser
 - The next time you get an opponent or type !opp in your connected twitch chat during a game the overlay will show the opponents.
 - The overlay custom output preformat string can be set in the overlay options menu.
 - The overlay can be further customized if you alter the overlay_style.css file manually.
+
+
+# Run from Source Code instead of .exe
+
+To execute it from source code:
+
+Download all files in the repo then:
+
+From the command line in the appropriate directory use. "python coh_opponent_bot.py"
+
+Currently built with:<br>
+<br>
+python version 3.12.0<br>
+PyInstaller version 6.7.0<br>
+<br>
+Python Dependencies :<br>
+<br>
+requests version 2.31.0<br>
+mem_edit version 0.7<br>
+pymem version 1.13.0<br>
+<br>
+These can be installed using pip <br>
+<br>
+"pip install pyinstaller"<br>
+"pip install requests"<br>
+"pip install mem_edit"<br>
+"pip install pymem"<br>
+<br>
+On Windows you can compile a single executable using pyinstaller, the commands can be executed in the build.bat batch file.
+pyinstaller has a nasty habit of producing programs that immediately get flagged as a virus by windows anti virus.
+An exception must be added the the windows defender in order to use the program as an .exe or it will most likely be automatically 
+quarantined by the operating system. 
+
 
 
 Enjoy, 
