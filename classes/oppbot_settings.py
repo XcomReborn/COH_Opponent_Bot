@@ -387,6 +387,9 @@ class Settings:
                 response = urllib.request.urlopen(
                     str(self.privatedata.get('relicServerProxyStatRequest'))
                     + str(self.data['steamNumber'])
+                    + f"&steamNumber={self.data.get('steamNumber')}"
+                    + f"&version={self.privatedata.get('version_number')}"
+
                 ).read()
                 statdata = json.loads(response.decode('utf-8'))
                 # print(statdata)
