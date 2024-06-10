@@ -57,7 +57,7 @@ Alternatively, visit https://steamid.co/ and enter your steam account name if yo
 
 # Twitch TV Chat Bot Commands
 
-After connecting to your twitch channel typing:<BR>
+After connecting to your twitch channel and DURING A GAME typing:<BR>
 <BR>
 'opponent' or 
 '!opponent' or
