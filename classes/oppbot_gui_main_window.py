@@ -546,15 +546,24 @@ class GUIMainWindow:
         "creates general option menu."
         if not self.options_menu:
             self.options_menu = GUIOptionsWindow(self, "general")
+        else:
+            self.options_menu.on_close_options()
+            self.options_menu = GUIOptionsWindow(self, "general")
 
     def create_twitch_options_menu(self):
         "creates twitch option menu."
         if not self.options_menu:
             self.options_menu = GUIOptionsWindow(self, "twitch")
+        else:
+            self.options_menu.on_close_options()
+            self.options_menu = GUIOptionsWindow(self, "twitch")
 
     def create_overlay_options_menu(self):
         "creates overlay option menu."
         if not self.options_menu:
+            self.options_menu = GUIOptionsWindow(self, "overlay")
+        else:
+            self.options_menu.on_close_options()
             self.options_menu = GUIOptionsWindow(self, "overlay")
 
 
