@@ -2,9 +2,10 @@ import threading
 import logging
 import re
 
-from queue import Queue
+from queue import Empty, Queue
 from socket import socket
 from threading import Thread
+import time
 from tkinter import END
 
 from classes.oppbot_settings import Settings
@@ -28,21 +29,26 @@ class IRC_Channel(threading.Thread):
         self.irc_socket = irc_socket
         self.queue = queue
         self.channel = channel
+        self.event = threading.Event()
 
         self.settings = settings
         if not settings:
             self.settings = Settings()
 
-        self.game_data = GameData(self.irc_client, settings=self.settings)
+        self.game_data = None
 
     def run(self):
         self.irc_socket.send(('JOIN ' + self.channel + '\r\n').encode("utf8"))
         while self.running:
-            line = self.queue.get()
+            self.event.wait(0.1)
+            try:
+                line = self.queue.get(block=False)
+            except Empty:
+                continue
             line = str.rstrip(line)
             line = str.split(line)
-            if (line[0] == "EXITTHREAD"):
-                self.close()
+            #if (line[0] == "EXITTHREAD"):
+            #    self.close()
             if (line[0] == "OPPONENT"):
                 self.check_for_user_command("self", "opp")
             if (line[0] == "TEST"):
@@ -60,6 +66,7 @@ class IRC_Channel(threading.Thread):
             ):
                 # call function to handle user message
                 self.user_message(line)
+            
 
     def user_message(self, line):
         "Processes IRC returned raw string data."
@@ -201,6 +208,7 @@ class IRC_Channel(threading.Thread):
 
     def close(self):
         "Closes the IRC channel."
-
         self.running = False
+        if self.event:
+            self.event.set()
         logging.info("Closing Channel " + str(self.channel) + " thread.")

@@ -5,6 +5,7 @@ import os  # to allow directory exists checking etc.
 import os.path
 import threading
 import logging
+import time
 from tkinter import END
 from queue import Queue
 
@@ -28,6 +29,8 @@ class IRC_Client(threading.Thread):
 
         self.settings = Settings()
         self.settings.load()
+
+        self.event = threading.Event()
 
         self.adminUserName = self.settings.privatedata.get('adminUserName')
         # This username will be able to use admin commands
@@ -124,6 +127,7 @@ class IRC_Client(threading.Thread):
 
         # This is the main loop
         while self.running:
+            self.event.wait(0.1)
             try:
                 # maintain non blocking recieve buffer from IRC
                 readbuffer = readbuffer+self.ircSocket.recv(
@@ -171,6 +175,7 @@ class IRC_Client(threading.Thread):
                     if(line[0] == "PING"):
                         self.ircSocket.send(
                             ("PONG %s\r\n" % line[0]).encode("utf8"))
+                
             except Exception as e:
                 if e:
                     pass
@@ -194,6 +199,9 @@ class IRC_Client(threading.Thread):
 
         self.queue.put("EXITTHREAD")
         logging.info("in close in thread")
+
+        self.channelThread.close()
+
         try:
             # send closing message immediately
             """             if self.ircSocket:
@@ -207,6 +215,8 @@ class IRC_Client(threading.Thread):
             self.running = False
             if self.messageBufferTimer:
                 self.messageBufferTimer.cancel()
+            if self.event:
+                self.event.set()
         except Exception as e:
             logging.error("In close")
             logging.error(str(e))

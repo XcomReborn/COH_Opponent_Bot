@@ -753,7 +753,7 @@ class GUIMainWindow:
             if(self.irc_twitch_client):
                 self.irc_twitch_client.close()
             self.close_coh_monitor()
-            while ((self.irc_twitch_client) and (self.coh_memory_monitor)):
+            while ((self.irc_twitch_client.is_alive()) or (self.coh_memory_monitor.is_alive())):
                 # wait for irc_twitch_client and coh_memory_monitor
                 # to exit and become None
                 pass
