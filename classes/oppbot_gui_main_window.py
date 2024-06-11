@@ -690,6 +690,19 @@ class GUIMainWindow:
                 self.coh_memory_monitor.settings = self.settings
         self.enable_buttons()
 
+    def reenable_connect_button(self):
+        "re-enables button after connection failure"
+        self.enable_buttons()
+        self.button_connect.config(text="Connect")
+        if self.irc_twitch_client:
+            self.irc_twitch_client.close()
+        self.irc_twitch_client = None
+
+    def reenable_disconnect_button(self):
+        "re-enables button after connection success"
+        self.enable_buttons()
+        self.button_connect.config(text="Disconnect")
+
     def connect_irc(self):
         "connect irc."
         self.settings.load()
@@ -719,7 +732,7 @@ class GUIMainWindow:
                 self.button_connect.config(text="Disconnect")
                 if self.button_test:
                     self.button_test.config(state=NORMAL)
-                self.irc_twitch_client = IRC_Client(self.txt_console)
+                self.irc_twitch_client = IRC_Client(self, self.txt_console)
                 self.irc_twitch_client.start()
                 # Assign reference to memory monitor to pass messages
                 if self.coh_memory_monitor:

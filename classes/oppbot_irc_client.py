@@ -21,10 +21,11 @@ toSend = False
 class IRC_Client(threading.Thread):
     "IRC Chat Client Maintains Socket and Message Send Buffer."
 
-    def __init__(self, output = None):
+    def __init__(self, main_window = None, output = None):
 
         threading.Thread.__init__(self)
 
+        self.main_window = main_window
         self.output = output
 
         self.settings = Settings()
@@ -168,6 +169,8 @@ class IRC_Client(threading.Thread):
                                 "channel to say hello!\n"
                             )
                             self.send_to_outputfield(message)
+                            if self.main_window:
+                                self.main_window.reenable_disconnect_button()
                         except Exception as e:
                             logging.error(str(e))
                             logging.exception("Exception : ")
@@ -189,6 +192,10 @@ class IRC_Client(threading.Thread):
                 " spelt correctly and is port 6667 open?\n"
             )
             self.send_to_outputfield(message)
+            # reset connection button here.
+            if self.main_window:
+                self.main_window.reenable_connect_button()
+
         except Exception as e:
             logging.error(str(e))
             logging.exception("Exception : ")
