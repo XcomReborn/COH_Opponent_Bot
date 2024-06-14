@@ -50,21 +50,14 @@ class MemoryMonitor(threading.Thread):
                 # may not exist when first started
                 self.gameData.irc_client = self.irc_client
                 self.gameData.get_data_from_game()
-                if self.gameData.gameInProgress:
+                if self.gameData.coh_rec_present or self.gameData.is_replay:
                     # COH_REC exists game running
+                    # is_replay indicates a replay path exists
                     if ((self.game_started_date != self.gameData.gameStartedDate) or
                         (self.replay_path != self.gameData.replay_full_path)):
                         # coh wasn't running and now it is (game started)
                         self.game_started()
 
-                else:
-                    # COH_REC doesn't exists game not running
-                    if self.gameData.gameInProgress != self.gameInProgress:
-                        # coh was running and now its not (game over)
-                        self.game_over()
-                self.gameInProgress = self.gameData.gameInProgress
-                # set local gameInProgress flag to it can be compared with
-                # any changes to it in the next loop
                 self.event.wait(self.poll_interval)
         except Exception as e:
             logging.error("In FileMonitor run")

@@ -56,7 +56,7 @@ class GameData():
         self.slots = 0
         self.matchType = MatchType.CUSTOM
         self.cohRunning = False
-        self.gameInProgress = False
+        self.coh_rec_present = False
         self.gameStartedDate = None
 
         self.randomStart = None
@@ -120,12 +120,13 @@ class GameData():
         live_replay = self.get_replayParser_by_search()
         replayParser = live_replay
         if not live_replay:
+            self.coh_rec_present = False
             # Check if PLAYBACK:filename.rec exists
             # If so assume game is a replay and in progress
             recorded_replay = self.get_replay_parser_from_memory_replays()
             if recorded_replay:
                 replayParser = recorded_replay
-                self.gameInProgress = True
+                
             else:
                 return False
         
@@ -403,7 +404,7 @@ class GameData():
                 if rd:
                     if rd[4:12] == bytes("COH__REC".encode('ascii')):
                         #logging.info("Pointing to COH__REC")
-                        self.gameInProgress = True
+                        self.coh_rec_present = True
                         replayByteData = bytearray(rd)
                         replayParser = ReplayParser(parameters=self.settings)
                         replayParser.data = bytearray(replayByteData)
@@ -428,7 +429,7 @@ class GameData():
                     for address in replayMemoryAddress:
                         # There should be only one COH__REC in memory
                         # if the game is running
-                        self.gameInProgress = True
+                        self.coh_rec_present = True
                         try:
                             rd = self.pm.read_bytes(address-4, 4000)
                             rd = bytearray(rd)
@@ -510,9 +511,9 @@ class GameData():
                 except Exception as e:
                     print(e)
                 replay_full_path = self.settings.data.get('playbackPath') + replay_filename
-                self.is_replay = True
                 if (self.replay_full_path != replay_full_path):
                     # To save on constantly reloading the file info
+                    self.is_replay = True
                     self.replay_full_path = replay_full_path
                     return ReplayParser(filePath=self.replay_full_path)
 
@@ -1442,7 +1443,7 @@ class GameData():
         output += f"automatch : {str(self.automatch)}\n"
         output += f"modName : {str(self.modName)}\n"
         output += f"COH running : {str(self.cohRunning)}\n"
-        output += f"Game In Progress : {str(self.gameInProgress)}\n"
+        output += f"COH__REC present : {str(self.coh_rec_present)}\n"
         output += f"gameStartedDate : {str(self.gameStartedDate)}\n"
         output += f"cohProcessID : {str(self.cohProcessID)}\n"
         output += f"baseAddress : {str(self.base_address)}\n"
