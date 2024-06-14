@@ -115,7 +115,7 @@ class PlayerStat:
             self.steamProfileAddress = (
                 f"steamcommunity.com/profiles/{str(self.steamNumber)}")
             self.cohstatsLink = (
-                f"playercard.cohstats.com/?steamid={str(self.steamNumber)}"
+                f"cohstats.com/i?d={str(self.steamNumber)}"
             )
 
     def __str__(self):
