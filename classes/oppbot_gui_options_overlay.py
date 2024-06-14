@@ -32,8 +32,8 @@ class OptionsOverlay:
 
         v = int(bool(self.settings.data.get('enable_overlay')))
         self.intvar_enable_overlay = IntVar(value=v)
-        v = int(bool(self.settings.data.get('clearOverlayAfterGameOver')))
-        self.intvar_clear_overlay_gameover = IntVar(value=v)
+        #v = int(bool(self.settings.data.get('clearOverlayAfterGameOver')))
+        #self.intvar_clear_overlay_gameover = IntVar(value=v)
 
         self.textvar_default_left = StringVar()
         self.textvar_default_right = StringVar()
@@ -153,12 +153,12 @@ class OptionsOverlay:
 
             self.string_format_labels.append(my_label)
 
-        self.check_clear_overlay_after_game = tkinter.Checkbutton(
-            self.frame,
-            text="Clear overlay after game over",
-            variable=self.intvar_clear_overlay_gameover,
-            command=self.save_toggles)
-        self.check_clear_overlay_after_game.grid(sticky=W)
+        #self.check_clear_overlay_after_game = tkinter.Checkbutton(
+        #    self.frame,
+        #    text="Clear overlay after game over",
+        #    variable=self.intvar_clear_overlay_gameover,
+        #    command=self.save_toggles)
+        #self.check_clear_overlay_after_game.grid(sticky=W)
 
         # Overlay Preformats
 
@@ -1070,8 +1070,8 @@ class OptionsOverlay:
     def save_toggles(self):
         "saves all toggles."
 
-        self.settings.data['clearOverlayAfterGameOver'] = (
-            bool(self.intvar_clear_overlay_gameover.get()))
+        #self.settings.data['clearOverlayAfterGameOver'] = (
+        #    bool(self.intvar_clear_overlay_gameover.get()))
 
         self.settings.data['enable_overlay'] = (
             bool(self.intvar_enable_overlay.get()))

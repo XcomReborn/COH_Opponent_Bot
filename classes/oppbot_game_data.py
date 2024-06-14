@@ -73,6 +73,7 @@ class GameData():
         self.is_replay = False
         self.replay_full_path = ""
 
+
         # This holds a list of IRC string outputs.
         self.ircStringOutputList = []
 
@@ -89,10 +90,7 @@ class GameData():
         self.numberOfPlayers = 0
         self.slots = 0
         self.matchType = MatchType.CUSTOM
-        self.cohRunning = False
-        self.gameInProgress = False
         self.gameStartedDate = None
-        self.cohProcessID = None
         self.randomStart = None
         self.highResources = None
         self.VPCount = None
@@ -111,7 +109,7 @@ class GameData():
         "Attempts to get all the COH information from memory."
 
         # First Clear all data that can be aquired from the game
-        self.clear_data()
+        # self.clear_data()
 
         # Check if company of heroes is running if not return false
         if not self.get_COH_memory_address():
@@ -119,15 +117,20 @@ class GameData():
 
         # Check if a game is currently in progress.
         # replayParser = self.Get_replayParser_BySearch()
-        replayParser = self.get_replayParser_by_search()
-        if not replayParser:
+        live_replay = self.get_replayParser_by_search()
+        replayParser = live_replay
+        if not live_replay:
             # Check if PLAYBACK:filename.rec exists
             # If so assume game is a replay and in progress
-            replayParser = self.get_replay_parser_from_memory_replays()
-            if replayParser:
+            recorded_replay = self.get_replay_parser_from_memory_replays()
+            if recorded_replay:
+                replayParser = recorded_replay
                 self.gameInProgress = True
             else:
                 return False
+        
+        # if new data availble
+        self.clear_data()
 
         self.gameStartedDate = replayParser.localDate
         self.randomStart = replayParser.randomStart
@@ -409,9 +412,6 @@ class GameData():
                         if success:
                             return replayParser
 
-        # Sets gameInProgress to False if COH__REC was not found
-        # eg game is not in progress.
-        self.gameInProgress = False
 
     def get_replayParser_by_search(self) -> ReplayParser:
         "Gets an instance of the replayParser containing COH game info."
@@ -450,9 +450,6 @@ class GameData():
                         except Exception as e:
                             if e:
                                 pass
-                else:
-                    #logging.info("Cannot detect COH__REC in memory.")
-                    self.gameInProgress = False
 
 
 
@@ -512,9 +509,12 @@ class GameData():
                     replay_filename = self.read_null_terminated_2_byte_string(rd)[9:]
                 except Exception as e:
                     print(e)
-                self.replay_full_path = self.settings.data.get('playbackPath') + replay_filename
+                replay_full_path = self.settings.data.get('playbackPath') + replay_filename
                 self.is_replay = True
-                return ReplayParser(filePath=self.replay_full_path)
+                if (self.replay_full_path != replay_full_path):
+                    # To save on constantly reloading the file info
+                    self.replay_full_path = replay_full_path
+                    return ReplayParser(filePath=self.replay_full_path)
 
 
     def send_to_tkconsole(self, message):

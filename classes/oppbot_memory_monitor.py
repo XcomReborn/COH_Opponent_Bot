@@ -36,6 +36,8 @@ class MemoryMonitor(threading.Thread):
         self.irc_client : IRC_Client = None
         self.tkconsole = tkconsole
 
+        # for checking if game has changed
+        self.game_started_date = None
         self.replay_path = ""
 
     def run(self):
@@ -50,7 +52,7 @@ class MemoryMonitor(threading.Thread):
                 self.gameData.get_data_from_game()
                 if self.gameData.gameInProgress:
                     # COH_REC exists game running
-                    if ((self.gameData.gameInProgress != self.gameInProgress) or
+                    if ((self.game_started_date != self.gameData.gameStartedDate) or
                         (self.replay_path != self.gameData.replay_full_path)):
                         # coh wasn't running and now it is (game started)
                         self.game_started()
@@ -81,6 +83,7 @@ class MemoryMonitor(threading.Thread):
         # if a replay
         if self.gameData.is_replay:
             self.replay_path = self.gameData.replay_full_path
+        self.game_started_date = self.gameData.gameStartedDate
 
     def post_steam_number(self):
         try:
