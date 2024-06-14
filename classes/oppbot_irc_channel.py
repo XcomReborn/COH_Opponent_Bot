@@ -47,8 +47,7 @@ class IRC_Channel(threading.Thread):
                 continue
             line = str.rstrip(line)
             line = str.split(line)
-            #if (line[0] == "EXITTHREAD"):
-            #    self.close()
+
             if (line[0] == "OPPONENT"):
                 self.check_for_user_command("self", "opp")
             if (line[0] == "TEST"):
@@ -66,6 +65,7 @@ class IRC_Channel(threading.Thread):
             ):
                 # call function to handle user message
                 self.user_message(line)
+        logging.info("IRC_Channel Exiting Main Loop!")
             
 
     def user_message(self, line):

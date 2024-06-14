@@ -182,6 +182,7 @@ class IRC_Client(threading.Thread):
             except Exception as e:
                 if e:
                     pass
+    logging.info("IRC_Client Exiting Main Loop!")
 
     def connection_timedout(self):
         "Displays notification when IRC fails to connect."
@@ -204,19 +205,14 @@ class IRC_Client(threading.Thread):
     def close(self):
         "Close handles cleanup of closing the IRC connection."
 
-        self.queue.put("EXITTHREAD")
         logging.info("in close in thread")
 
-        self.channelThread.close()
+        if self.channelThread:
+            self.channelThread.close()
+            self.channelThread.join()
 
         try:
             # send closing message immediately
-            """             if self.ircSocket:
-                self.ircSocket.send(
-                    (
-                        f"PRIVMSG {self.channel} :closing opponent"
-                        " bot\r\n").encode('utf8')
-                    ) """
             while self.channelThread.is_alive():
                 pass
             self.running = False

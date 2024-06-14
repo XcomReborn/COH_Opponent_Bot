@@ -746,7 +746,8 @@ class GUIMainWindow:
     def start_coh_monitor(self):
         "start monitor."
         # Ensure they are off if running
-        self.close_coh_monitor()
+        if self.coh_memory_monitor:
+            self.coh_memory_monitor.close()
         # Create Monitor Thread.
         self.coh_memory_monitor = MemoryMonitor(
             poll_interval=self.settings.data.get('filePollInterval'),
@@ -754,22 +755,18 @@ class GUIMainWindow:
             tkconsole=self.txt_console)
         self.coh_memory_monitor.start()
 
-    def close_coh_monitor(self):
-        "close monitors."
-        if self.coh_memory_monitor:
-            self.coh_memory_monitor.close()
 
     def on_closing(self):
         "on closing."
         logging.info("In on_closing program (Closing)")
         try:
-            if(self.irc_twitch_client):
+            if self.irc_twitch_client:
                 self.irc_twitch_client.close()
-            self.close_coh_monitor()
-            while ((self.irc_twitch_client.is_alive()) or (self.coh_memory_monitor.is_alive())):
-                # wait for irc_twitch_client and coh_memory_monitor
-                # to exit and become None
-                pass
+                self.irc_twitch_client.join()
+            
+            if self.coh_memory_monitor:
+                self.coh_memory_monitor.close()
+                self.coh_memory_monitor.join()
                 
         except Exception as e:
             logging.error(str(e))

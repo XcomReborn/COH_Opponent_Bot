@@ -36,16 +36,22 @@ class MemoryMonitor(threading.Thread):
         self.irc_client : IRC_Client = None
         self.tkconsole = tkconsole
 
+        self.replay_path = ""
+
     def run(self):
         try:
+
+            self.gameData = GameData(irc_client=self.irc_client, tkconsole=self.tkconsole, settings=self.settings)
+
             while self.running:
-                # Create new instance of GameData because reference to irc client 
+                # Reference to irc client
                 # may not exist when first started
-                self.gameData = GameData(irc_client=self.irc_client, tkconsole=self.tkconsole, settings=self.settings)
+                self.gameData.irc_client = self.irc_client
                 self.gameData.get_data_from_game()
                 if self.gameData.gameInProgress:
                     # COH_REC exists game running
-                    if self.gameData.gameInProgress != self.gameInProgress:
+                    if ((self.gameData.gameInProgress != self.gameInProgress) or
+                        (self.replay_path != self.gameData.replay_full_path)):
                         # coh wasn't running and now it is (game started)
                         self.game_started()
 
@@ -62,6 +68,7 @@ class MemoryMonitor(threading.Thread):
             logging.error("In FileMonitor run")
             logging.error(str(e))
             logging.exception("Exception : ")
+        logging.info("Memory Monitor Exiting Main Loop!")
 
     def game_started(self):
 
@@ -71,6 +78,9 @@ class MemoryMonitor(threading.Thread):
         self.post_steam_number()
         # enable to output to the opponent bot channel
         self.post_data()
+        # if a replay
+        if self.gameData.is_replay:
+            self.replay_path = self.gameData.replay_full_path
 
     def post_steam_number(self):
         try:

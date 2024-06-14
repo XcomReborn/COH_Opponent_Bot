@@ -177,7 +177,7 @@ class OptionsOverlay:
 
 
         # Default Label
-        self.label_default = tkinter.Label(self.frame_overlay_pf, text="Default")
+        self.label_default = tkinter.Label(self.frame_overlay_pf, text="Default / Replays")
         self.label_default.grid(sticky=W, row=1, column=0)
 
         entryWidth = 65

@@ -21,8 +21,8 @@ class Settings:
         self.privatedata = {}
 
         # Manually update for about box.
-        self.privatedata['version_number'] = "5.1a"
-        self.privatedata['build_date'] = "11-JUN-2024"
+        self.privatedata['version_number'] = "5.2.0"
+        self.privatedata['build_date'] = "14-JUN-2024"
 
         # custom display toggles
         # what to show in stat string constuct
@@ -40,11 +40,12 @@ class Settings:
         self.data['steamFolder'] = ""
         self.data['cohPath'] = ""
         self.data['cohUCSPath'] = ""
+        self.data['playbackPath'] = ""
         self.data['raw_irc_console_display'] = False
         self.data['enable_overlay'] = True
         self.data['enable_twitch_bot'] = True
 
-        temp = "$NAME$ $FLAGICON$ $FACTIONICON$<BR>"
+        temp = "$NAME$ $FACTIONICON$<BR>"
         self.data['overlay_default_left_pf'] = temp
         temp = "$NAME$ ($FLAGICON$) $LEVELICON$ $RANK$ $FACTIONICON$<BR>"
         self.data['overlay_1v1_left_pf'] = temp
@@ -56,7 +57,7 @@ class Settings:
 
         self.data['mirrorLeftToRightOverlay'] = True
 
-        temp = "$FACTIONICON$ $FLAGICON$ $NAME$<BR>"
+        temp = "$FACTIONICON$ $NAME$<BR>"
         self.data['overlay_default_right_pf'] = temp
         temp = "$FACTIONICON$ $RANK$ $LEVELICON$ ($FLAGICON$) $NAME$<BR>"
         self.data['overlay_1v1_right_pf'] = temp
@@ -404,6 +405,30 @@ class Settings:
             except Exception as e:
                 logging.error(str(e))
                 logging.exception("Exception : ")
+
+        # set playback path
+        try:
+            CSIDL_PERSONAL = 5       # My Documents
+            SHGFP_TYPE_CURRENT = 0   # Get current, not default value
+
+            buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
+
+            ctypes.windll.shell32.SHGetFolderPathW(
+                None,
+                CSIDL_PERSONAL,
+                None,
+                SHGFP_TYPE_CURRENT,
+                buf
+            )
+
+            loc = "\\My Games\\Company of Heroes Relaunch\\playback\\"
+            playback_path = buf.value + loc
+            self.data['playbackPath'] = playback_path
+
+        except Exception as e:
+            logging.error(str(e))
+            logging.exception("Exception : ")
+
 
     def load(self, filePath="data.json"):
         try:
