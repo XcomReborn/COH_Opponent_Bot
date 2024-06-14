@@ -335,12 +335,15 @@ class GameData():
         "Gets memory address from a pointer address (base)"
 
         try:
-            if self.pm:
+            if self.pm:           
                 addr = self.pm.read_int(base)
-                for i in offsets:
-                    if i != offsets[-1]:
-                        addr = self.pm.read_int(addr + i)
+                for count, offset in enumerate(offsets):
+                        if count == len(offsets) - 1:
+                            break
+                        addr = self.pm.read_int(addr + offset)
                 return addr + offsets[-1]
+
+
         except Exception as e:
             if e:
                 return None
