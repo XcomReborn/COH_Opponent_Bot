@@ -18,7 +18,7 @@ class MatchType(Enum):
     PANZERKRIEG_2v2 = 11
     PANZERKRIEG_TEAM_2v2 = 12
     PANZERKRIEG_TEAM_3v3 = 13
-    COMPSTOMP = 14
+    COMPSTOMP = 14 # skirmish
     ASSAULT = 15
     PANZERKRIEG = 16
     STONEWALL = 17
