@@ -24,7 +24,6 @@ class MemoryMonitor(threading.Thread):
             self.settings = Settings()
 
         self.event = threading.Event()
-        self.gameData : GameData = None
  
         try:
             self.poll_interval = int(poll_interval)
@@ -37,11 +36,14 @@ class MemoryMonitor(threading.Thread):
         # for checking if game has changed
         self.game_in_progress = False
 
+        self.gameData = GameData(
+            irc_client=self.irc_client,
+            tkconsole=self.tkconsole,
+            settings=self.settings)
+
 
     def run(self):
         try:
-
-            self.gameData = GameData(irc_client=self.irc_client, tkconsole=self.tkconsole, settings=self.settings)
 
             while self.running:
                 # Reference to irc client

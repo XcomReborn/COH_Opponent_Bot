@@ -753,21 +753,25 @@ class GameData():
                 ") Hard, (" + str(self.expertCPUCount) +
                 ") Expert."
             )
+
+
+
         for item in self.playerList:
             # check if item has stats if not it is a computer
+
             if item.stats:
+
                 steamNumber = self.settings.data.get('steamNumber')
-                if (item.stats.steamNumber == steamNumber):
+                if (str(item.stats.steamNumber) == str(steamNumber)):
                     if (self.settings.data.get('showOwn')):
                         self.ircStringOutputList = (
                             self.ircStringOutputList +
-                            self.create_custom_output(item)
-                        )
+                            self.create_custom_output(item))
+                        
                 else:
                     self.ircStringOutputList = (
                         self.ircStringOutputList +
-                        self.create_custom_output(item)
-                    )
+                        self.create_custom_output(item))
 
         for item in self.ircStringOutputList:
             # outputs the information to IRC
