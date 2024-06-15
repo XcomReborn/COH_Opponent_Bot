@@ -721,7 +721,7 @@ class OptionsOverlay:
         self.label_match_type.grid(
             sticky=W,
             row=1,
-            column=0)        
+            column=0)
         
         # Drop down combox box for Match Type
         match_types = ["All",
