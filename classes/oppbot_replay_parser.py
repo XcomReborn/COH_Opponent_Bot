@@ -10,11 +10,11 @@ from classes.oppbot_ucs import UCS
 class ReplayParser:
     "Parses a Company of Heroes 1 replay header."
 
-    def __init__(self, filePath=None, parameters=None) -> None:
+    def __init__(self, filePath=None, settings=None) -> None:
 
-        self.parameters = parameters
-        if not parameters:
-            self.parameters = Settings()
+        self.settings = settings
+        if not settings:
+            self.settings = Settings()
 
         self.filePath = filePath
 
@@ -262,7 +262,7 @@ class ReplayParser:
         # until resolved this takes time because file reading
         # so moved to separate function call
         # get mapNameFull and mapDescriptionFull from ucs file
-        ucs = UCS(settings=self.parameters)
+        ucs = UCS(settings=self.settings)
         self.mapNameFull = ucs.compare_UCS(self.mapName)
         self.mapDescriptionFull = ucs.compare_UCS(self.mapDescription)
 

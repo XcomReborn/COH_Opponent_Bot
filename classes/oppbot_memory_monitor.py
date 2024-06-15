@@ -14,7 +14,7 @@ class MemoryMonitor(threading.Thread):
         poll_interval=10,
         settings = None,
         tkconsole : tkinter.Text = None
-                ):
+        ):
         threading.Thread.__init__(self)
         logging.info("Memory Monitor Started!")
         self.running = True
@@ -22,9 +22,7 @@ class MemoryMonitor(threading.Thread):
         self.settings = settings
         if not settings:
             self.settings = Settings()
-        
-        self.gameInProgress = False
-        
+
         self.event = threading.Event()
         self.gameData : GameData = None
  
@@ -37,8 +35,8 @@ class MemoryMonitor(threading.Thread):
         self.tkconsole = tkconsole
 
         # for checking if game has changed
-        self.game_started_date = None
-        self.replay_path = ""
+        self.game_in_progress = False
+
 
     def run(self):
         try:
@@ -50,13 +48,22 @@ class MemoryMonitor(threading.Thread):
                 # may not exist when first started
                 self.gameData.irc_client = self.irc_client
                 self.gameData.get_data_from_game()
-                if self.gameData.coh_rec_present or self.gameData.is_replay:
-                    # COH_REC exists game running
-                    # is_replay indicates a replay path exists
-                    if ((self.game_started_date != self.gameData.gameStartedDate) or
-                        (self.replay_path != self.gameData.replay_full_path)):
-                        # coh wasn't running and now it is (game started)
+                if self.gameData.game_in_progress:
+                    # game is in progress
+                    if self.game_in_progress != self.gameData.game_in_progress:
+                        # the state has changed (game started)
+                        # set the local state to the game state
+                        self.game_in_progress = self.gameData.game_in_progress
+                        # do game started method
                         self.game_started()
+                else:
+                    # game is not in progress
+                    if self.game_in_progress != self.gameData.game_in_progress:
+                        # the state has changed (game over)
+                        # set the local state to the game state
+                        self.game_in_progress = self.gameData.game_in_progress        
+                        # do game over method                
+                        self.game_over()
 
                 self.event.wait(self.poll_interval)
         except Exception as e:
@@ -73,10 +80,6 @@ class MemoryMonitor(threading.Thread):
         self.post_steam_number()
         # enable to output to the opponent bot channel
         self.post_data()
-        # if a replay
-        if self.gameData.is_replay:
-            self.replay_path = self.gameData.replay_full_path
-        self.game_started_date = self.gameData.gameStartedDate
 
     def post_steam_number(self):
         try:

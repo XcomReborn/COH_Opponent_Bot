@@ -39,10 +39,8 @@ class GameData():
         # Local reference to tkconsole
         self.tkconsole = tkconsole
 
-        # Pymem handle
+        # shared handle to process
         self.pm = None
-        self.base_address = None
-        self.cohProcessID = None
 
         # Replay Data Default Values
         self.playerList = []
@@ -55,8 +53,6 @@ class GameData():
         self.numberOfPlayers = 0
         self.slots = 0
         self.matchType = MatchType.CUSTOM
-        self.cohRunning = False
-        self.coh_rec_present = False
         self.gameStartedDate = None
 
         self.randomStart = None
@@ -70,7 +66,11 @@ class GameData():
         self.mapDescriptionFull = ""
         self.gameDescriptionString = ""
 
-        self.is_replay = False
+
+        # application state indicators
+        self.coh_running = False
+        self.game_in_progress = False
+        self.live_game = False
         self.replay_full_path = ""
 
 
@@ -115,41 +115,41 @@ class GameData():
         if not self.get_COH_memory_address():
             return False
 
+        # Check for in game or main menu
+        self.check_for_game_in_progress()
+
         # Check if a game is currently in progress.
         # replayParser = self.Get_replayParser_BySearch()
-        live_replay = self.get_replayParser_by_search()
-        replayParser = live_replay
+        live_replay = self.get_replay_parser_by_pointer()
+        replay_parser = live_replay
         if not live_replay:
-            self.coh_rec_present = False
             # Check if PLAYBACK:filename.rec exists
             # If so assume game is a replay and in progress
             recorded_replay = self.get_replay_parser_from_memory_replays()
-            if recorded_replay:
-                replayParser = recorded_replay
-                
-            else:
+            replay_parser = recorded_replay
+            if not recorded_replay:
                 return False
-        
+
         # if new data availble
         self.clear_data()
 
-        self.gameStartedDate = replayParser.localDate
-        self.randomStart = replayParser.randomStart
+        self.gameStartedDate = replay_parser.localDate
+        self.randomStart = replay_parser.randomStart
 
-        self.highResources = replayParser.highResources
-        self.VPCount = replayParser.VPCount
+        self.highResources = replay_parser.highResources
+        self.VPCount = replay_parser.VPCount
         self.automatch = False
         # Korean replays don't contain a matchType string
-        if replayParser.matchType:
-            if replayParser.matchType.lower() == "automatch":
+        if replay_parser.matchType:
+            if replay_parser.matchType.lower() == "automatch":
                 self.automatch = True
 
 
-        self.mapName = replayParser.mapName
-        self.mapDescription = replayParser.mapDescription
-        self.modName = replayParser.modName
+        self.mapName = replay_parser.mapName
+        self.mapDescription = replay_parser.mapDescription
+        self.modName = replay_parser.modName
 
-        for item in replayParser.playerList:
+        for item in replay_parser.playerList:
             username = item['name']
             factionString = item['faction']
             player = Player(name=username, faction_name=factionString)
@@ -157,7 +157,7 @@ class GameData():
 
         statList = []
 
-        if not self.is_replay:
+        if not self.live_game:
             # Don't bother trying to get steam numbers and stats if replay
             statList = self.get_stats_from_game()
 
@@ -212,7 +212,7 @@ class GameData():
         self.hardCPUCount = hardCounter
         self.expertCPUCount = expertCounter
 
-        self.slots = len(replayParser.playerList)
+        self.slots = len(replay_parser.playerList)
 
         # Set the current MatchType
 
@@ -234,6 +234,67 @@ class GameData():
                     self.matchType = MatchType.FOURS
 
         return True
+
+    def check_for_game_in_progress(self) -> bool:
+
+        if not self.pm:
+            return
+
+        listOfPointers = []
+
+        process_name = "Localizer.dll"
+        address = 0x00013478
+        offsets = [0xA4, 0x0, 0x0]
+        listOfPointers.append([process_name ,address, offsets])
+
+        process_name = "Localizer.dll"
+        address = 0x00013478
+        offsets = [0xA4, 0x8, 0x0]
+        listOfPointers.append([process_name ,address, offsets])
+
+        game_in_progress = False
+
+        base_address = pymem.process.module_from_name(self.pm.process_handle, process_name).lpBaseOfDll
+
+        rd = None
+
+        for count, item in enumerate(listOfPointers):
+
+            ad = self.get_pointer_address(base_address + item[1], item[2])
+            actualMemoryAddress = ad
+
+            if actualMemoryAddress:
+                try:
+                    rd = self.pm.read_bytes(actualMemoryAddress, 6)
+                except Exception as e:
+                    logging.info(e)
+                if rd:
+                    try:
+                        # When the menu screen is available the version number
+                        # will be in memory "2.700.2.43" - I just get the first
+                        # 6 bytes of 2 byte wide utf-16le chars
+                        if "2.7" in rd.decode('utf-16le') :
+                            game_in_progress = False
+                            self.game_in_progress = game_in_progress
+                            return False
+                        else:
+                            # if not able to find version string
+                            # not in the main menu
+                            game_in_progress = True
+                            self.game_in_progress = game_in_progress
+
+                    except Exception as e:
+                        # exception maybe thrown due to being unable to
+                        # read the random bytes at this location when  
+                        # not in menu
+                        game_in_progress = True
+                        self.game_in_progress = game_in_progress
+
+        # In the event that rd was none due to read_bytes errors
+        # the game is more likely to be in progress than not.
+        self.game_in_progress = True
+        return self.game_in_progress
+
 
     def get_game_description_string(self) -> str:
         "Produces a single-line game description string."
@@ -334,14 +395,16 @@ class GameData():
     def get_pointer_address(self, base: int, offsets: list) -> int | None:
         "Gets memory address from a pointer address (base)"
 
+        if not self.pm:
+            return
+
         try:
-            if self.pm:           
-                addr = self.pm.read_int(base)
-                for count, offset in enumerate(offsets):
-                        if count == len(offsets) - 1:
-                            break
-                        addr = self.pm.read_int(addr + offset)
-                return addr + offsets[-1]
+            addr = self.pm.read_int(base)
+            for count, offset in enumerate(offsets):
+                    if count == len(offsets) - 1:
+                        break
+                    addr = self.pm.read_int(addr + offset)
+            return addr + offsets[-1]
 
         except Exception as e:
             return None
@@ -352,19 +415,21 @@ class GameData():
         try:
             self.pm = pymem.Pymem("RelicCOH.exe")
         except Exception as e:
-            self.cohRunning = False
+            self.pm = None
+            self.coh_running = False
             return False
         if self.pm:
-            self.base_address = self.pm.base_address
-            self.cohRunning = True
+            self.coh_running = True
             return True
 
-    def get_replayParser_by_pointer(self) -> ReplayParser:
+    def get_replay_parser_by_pointer(self) -> ReplayParser | None:
         "Gets an instance of the replayParser containing COH game info."
 
-        # There are four pointers to the replay that appear to be 'static'
-        # We can try them in sequence and return the data from the first
-        # one that works (Probably the first one)
+        if not self.pm:
+            return
+
+        base_address = self.pm.base_address
+
         myListOfCOHRECPointers = []
         # 1
         cohrecReplayAddress = 0x00902030
@@ -376,34 +441,43 @@ class GameData():
         cohrecOffsets = [0x28, 0x160, 0x4, 0x84, 0x24, 0x110, 0x0]
         myListOfCOHRECPointers.append([cohrecReplayAddress, cohrecOffsets])
 
+        coh_rec_present = False
+
+        rd = None
+
         for count, item in enumerate(myListOfCOHRECPointers):
-            #logging.info(f"{count} {item}")
-            ad = self.get_pointer_address(self.base_address + item[0], item[1])
+
+            ad = self.get_pointer_address(base_address + item[0], item[1])
             actualCOHRECMemoryAddress = ad
-            info = (
-                f"actualCOHRECMemoryAddress :"
-                f"{str(actualCOHRECMemoryAddress)}"
-                )
-            #logging.info(info)
+
             if actualCOHRECMemoryAddress:
                 try:
                     rd = self.pm.read_bytes(actualCOHRECMemoryAddress, 4000)
                 except Exception as e:
-                    logging.error(e)
+                    print(e)
                 if rd:
                     if rd[4:12] == bytes("COH__REC".encode('ascii')):
-                        #logging.info("Pointing to COH__REC")
-                        self.coh_rec_present = True
-                        replayByteData = bytearray(rd)
-                        replayParser = ReplayParser(parameters=self.settings)
-                        replayParser.data = bytearray(replayByteData)
-                        #logging.info("Successfully Parsed Replay Data")
-                        success = replayParser.process_data()
+                        # if COH__REC is present then the 
+                        # game is live meaning it is not a replay
+                        # and is recording the game state to memory.
+                        coh_rec_present = True
+                        self.live_game = coh_rec_present
+                        rd = bytearray(rd)
+                        rp = ReplayParser(settings=self.settings)
+                        rp.data = bytearray(rd)
+                        success = rp.process_data()
                         if success:
-                            return replayParser
+                            logging.info(
+                                "Successfully Parsed Replay Data.")
+                            return rp
+                        logging.info(
+                            "Replay Data did not parse correctly.")
+                        self.live_game = False
+                        return None
+        # if unable to find COH__REC in the memory then set live game to false
+        self.live_game = coh_rec_present
 
-
-    def get_replayParser_by_search(self) -> ReplayParser:
+    def get_replayParser_by_search(self) -> ReplayParser | None:
         "Gets an instance of the replayParser containing COH game info."
 
         if self.pm:
@@ -418,11 +492,11 @@ class GameData():
                     for address in replayMemoryAddress:
                         # There should be only one COH__REC in memory
                         # if the game is running
-                        self.coh_rec_present = True
+                        self.live_game = True
                         try:
                             rd = self.pm.read_bytes(address-4, 4000)
                             rd = bytearray(rd)
-                            rp = ReplayParser(parameters=self.settings)
+                            rp = ReplayParser(settings=self.settings)
                             rp.data = bytearray(rd)
                             success = rp.process_data()
                             # Processing game data may not be successful
@@ -431,7 +505,6 @@ class GameData():
                             if success:
                                 logging.info(
                                     "Successfully Parsed Replay Data.")
-                                self.is_replay = False
                                 return rp
                             else:
                                 logging.info(
@@ -440,8 +513,6 @@ class GameData():
                         except Exception as e:
                             if e:
                                 pass
-
-
 
     def read_null_terminated_2_byte_string(self, data) -> str:
         "Reads a Utf-16 little endian character string."
@@ -461,50 +532,51 @@ class GameData():
         except Exception as e:
             print(e)
 
-    # 1 - not functional but works in CE
-    #replayAddress = 0x008F80E0
-    #cohrecOffsets = [0x0, 0x90, 0x160, 0x4, 0xE90, 0x8CC, 0x0]
-    #myListOfReplayPathPointers.append([replayAddress, cohrecOffsets])
+    def get_replay_parser_from_memory_replays(self):
 
-    # 2 - not functional but works in CE
-    #replayAddress = 0x009017E8
-    #cohrecOffsets = [0x1C, 0x0, 0xE8C, 0x8CC, 0x0]
-    #myListOfReplayPathPointers.append([replayAddress, cohrecOffsets])
+        if not self.pm:
+            return
 
-    # 3 - Works!
-    #replayAddress = 0x00901B4C
-    #cohrecOffsets = [0x84, 0x4, 0x160, 0x4, 0xE90, 0x8CC, 0x0]
-    #myListOfReplayPathPointers.append([replayAddress, cohrecOffsets])
+        baseAddress = self.pm.base_address
 
+        replay_path_pointers = []
 
-    def get_replay_parser_from_memory_replays(self) -> ReplayParser:
+        # 1
+        replayAddress = 0x008F80E0
+        cohrecOffsets = [0x0, 0x90, 0x160, 0x4, 0xE90, 0x8CC, 0x0]
+        replay_path_pointers.append([replayAddress, cohrecOffsets])
 
-        #replayAddress = 0x00901B4C
-        #cohrecOffsets = [0x84, 0x4, 0x160, 0x4, 0xE90, 0x8CC, 0x0]
-        #myListOfReplayPathPointers.append([replayAddress, cohrecOffsets])
+        # 2
+        replayAddress = 0x009017E8
+        cohrecOffsets = [0x1C, 0x0, 0xE8C, 0x8CC, 0x0]
+        replay_path_pointers.append([replayAddress, cohrecOffsets])
 
+        # 3
+        replayAddress = 0x00901B4C
+        cohrecOffsets = [0x84, 0x4, 0x160, 0x4, 0xE90, 0x8CC, 0x0]
+        replay_path_pointers.append([replayAddress, cohrecOffsets])
+
+        # 4
         replayAddress = 0x00902030
         cohrecOffsets = [0x28, 0x160, 0x4, 0xE90, 0x8CC, 0x0]
+        replay_path_pointers.append([replayAddress, cohrecOffsets])
 
-        ad = self.get_pointer_address(self.base_address + replayAddress, cohrecOffsets)
-        actualMemoryAddress = ad
+        for count, item in enumerate(replay_path_pointers):
+            ad = self.get_pointer_address(baseAddress + item[0], item[1])
+            actualMemoryAddress = ad
 
-        if actualMemoryAddress:
-            try:
-                rd = self.pm.read_bytes(actualMemoryAddress, 300)
-            except Exception as e:
-                print(e)
-            if rd:
+            if actualMemoryAddress:
                 try:
-                    replay_filename = self.read_null_terminated_2_byte_string(rd)[9:]
+                    rd = self.pm.read_bytes(actualMemoryAddress, 300)
                 except Exception as e:
-                    print(e)
-                replay_full_path = self.settings.data.get('playbackPath') + replay_filename
-                if (self.replay_full_path != replay_full_path):
-                    # To save on constantly reloading the file info
-                    self.is_replay = True
-                    self.replay_full_path = replay_full_path
-                    return ReplayParser(filePath=self.replay_full_path)
+                    logging.error(e)
+                if rd:
+                    try:
+                        replay_path = self.settings.data.get('playbackPath') + self.read_null_terminated_2_byte_string(rd)[9:]
+                        self.replay_full_path = replay_path
+                        return ReplayParser(filePath = replay_path, settings=self.settings)
+                    except Exception as e:
+                        logging.error(e)
 
 
     def send_to_tkconsole(self, message):
@@ -531,37 +603,39 @@ class GameData():
     def get_stats_from_game(self):
         "Provides stats from playerList names from game memory."
 
-        if self.pm:
-            with Process.open_process(self.pm.process_id) as p:
-                steamNumberList = []
-                steamNumberList.append(self.settings.data.get('steamNumber'))
-                # add default value incase it isn't found.
-                for player in self.playerList:
-                    name = bytearray(str(player.name).encode('utf-16le'))
-                    buff = bytes(name)
-                    if buff:
-                        replayMemoryAddress = p.search_all_memory(buff)
-                        for address in replayMemoryAddress:
-                            try:
-                                ad = address-56
-                                dd = p.read_memory(ad, (ctypes.c_byte * 48)())
-                                dd = bytearray(dd)
-                                steamNumber = dd.decode('utf-16le').strip()
-                                if "/steam/" in steamNumber:
-                                    int(steamNumber[7:24])
-                                    # throws exception if steamNumber
-                                    # is not a number
-                                    info = (
-                                        f"Got steamNumber from memory "
-                                        f"{str(steamNumber[7:24])}"
-                                    )
-                                    logging.info(info)
-                                    sNumber = str(steamNumber[7:24])
-                                    steamNumberList.append(sNumber)
-                                    break
-                            except Exception as e:
-                                if e:
-                                    pass
+        if not self.pm:
+            return
+        
+        with Process.open_process(self.pm.process_id) as p:
+            steamNumberList = []
+            steamNumberList.append(self.settings.data.get('steamNumber'))
+            # add default value incase it isn't found.
+            for player in self.playerList:
+                name = bytearray(str(player.name).encode('utf-16le'))
+                buff = bytes(name)
+                if buff:
+                    replayMemoryAddress = p.search_all_memory(buff)
+                    for address in replayMemoryAddress:
+                        try:
+                            ad = address-56
+                            dd = p.read_memory(ad, (ctypes.c_byte * 48)())
+                            dd = bytearray(dd)
+                            steamNumber = dd.decode('utf-16le').strip()
+                            if "/steam/" in steamNumber:
+                                int(steamNumber[7:24])
+                                # throws exception if steamNumber
+                                # is not a number
+                                info = (
+                                    f"Got steamNumber from memory "
+                                    f"{str(steamNumber[7:24])}"
+                                )
+                                logging.info(info)
+                                sNumber = str(steamNumber[7:24])
+                                steamNumberList.append(sNumber)
+                                break
+                        except Exception as e:
+                            if e:
+                                pass
 
                 statList = []
                 for item in steamNumberList:
@@ -1185,7 +1259,7 @@ class GameData():
                         pf = self.settings.data.get('overlay_4v4_left_pf')
                     if (self.matchType == MatchType.CUSTOM):
                         pf = self.settings.data.get('overlay_custom_left_pf')
-                    if (self.is_replay):
+                    if (not self.live_game):
                         pf = self.settings.data.get('overlay_default_left_pf')
                     preFormattedString = pf
                     # first substitute all the text in the preformat
@@ -1217,7 +1291,7 @@ class GameData():
                         pf = self.settings.data.get('overlay_4v4_right_pf')
                     if (self.matchType == MatchType.CUSTOM):
                         pf = self.settings.data.get('overlay_custom_right_pf')
-                    if (self.is_replay):
+                    if (not self.live_game):
                         pf = self.settings.data.get('overlay_default_right_pf')
                     preFormattedString = pf
                     # first substitute all the text in the preformat
@@ -1431,11 +1505,9 @@ class GameData():
         output += f"VPCount : {str(self.VPCount)}\n"
         output += f"automatch : {str(self.automatch)}\n"
         output += f"modName : {str(self.modName)}\n"
-        output += f"COH running : {str(self.cohRunning)}\n"
-        output += f"COH__REC present : {str(self.coh_rec_present)}\n"
+        output += f"COH running : {str(self.coh_running)}\n"
+        output += f"COH__REC present : {str(self.live_game)}\n"
         output += f"gameStartedDate : {str(self.gameStartedDate)}\n"
-        output += f"cohProcessID : {str(self.cohProcessID)}\n"
-        output += f"baseAddress : {str(self.base_address)}\n"
         output += (
             f"gameDescriptionString : "
             f"{str(self.gameDescriptionString)}\n"
