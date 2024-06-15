@@ -7,8 +7,8 @@ class FactionResult():
 
     def __init__(
         self, faction=None, matchType=None, name=None, nameShort=None,
-        leaderboard_id=None, wins=None, losses=None, streak=None,
-        disputes=None, drops=None, rank=None, rankLevel=None, lastMatch=None
+        leaderboard_id=None, wins=-1, losses=-1, streak=0,
+        disputes=0, drops=0, rank=-1, rankLevel=-1, lastMatch=None
                 ):
         self.faction = faction
         self.matchType = matchType
@@ -47,14 +47,20 @@ class FactionResult():
         if "Panzer" in self.name:
             self.nameShort = "PE"
 
+        if not self.losses:
+            self.losses = 0
+
+        if not self.wins:
+            self.wins = 0
+
         try:
             if int(self.losses) != 0:
                 wlr = round(int(self.wins)/int(self.losses), 2)
                 self.winLossRatio = wlr
             else:
-                self.winLossRatio = 0
+                self.winLossRatio = 1
                 if int(self.wins) > 0:
-                    self.winLossRatio = self.wins
+                    self.winLossRatio = "Undefeated"
         except (ValueError,TypeError) as e:
             logging.error("In factionResult Creating winLossRatio")
             logging.error(str(e))
