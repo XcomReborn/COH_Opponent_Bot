@@ -17,7 +17,7 @@ html {
 .container{width:100%;
     position: relative;
     top: 0pt;
-    font-size: 14pt;
+    font-size: 20pt;
 }
 
 .countryflagimg{
@@ -32,7 +32,9 @@ html {
     display: inline;
     height:16pt;
     top: -3pt;
+
 }
+
 
 
 .factionflagimg{
@@ -44,8 +46,9 @@ html {
 
 .factionflagimg img{
     position: relative;
-    height:18pt;
-    top: -3pt;
+    display: inline;
+    width: 50px;
+    
 }
 
 .rankimg {
@@ -65,7 +68,6 @@ html {
 .textVariables {
     position: relative;
     display: inline;
-    top: -6pt;
 }
 
 .name {
@@ -161,7 +163,6 @@ html {
 .nonVariableText{
     position: relative;
     display: inline;
-    top: -6pt;
 }
 
 .steamprofile{
@@ -184,14 +185,16 @@ top: 0pt;
 
 .opponentTeam {
 
-      position : absolute;
+      position : relative;
+      display: inline;
       top: 3pt;
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
-      float: left;
-      margin-left: 58%;
+      float: right;
+      overflow: hidden;
       text-align: left;
       padding-bottom: 0pt;
+      padding: auto;
       }
 
 .opponentTeam .name{
@@ -203,13 +206,13 @@ color: white;
 .playerTeam {
 
       position: relative;
-      top: 2pt;
+      width: auto;
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
-      float: right;
-      margin-right: 58%;
+      float:left;
+      overflow:auto;
       text-align: right;
-      padding-bottom: 0pt;
+      padding: auto;
 
   }
 
@@ -222,12 +225,9 @@ color: white;
 .playerStats {
 
       position: relative;
-      top: 0pt;
+      top: 2pt;
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
-      float: right;
-      margin-right: 58%;
-      text-align: right;
       padding-bottom: 0pt;
 
   }
@@ -237,7 +237,8 @@ color: white;
 .PE{}
 .CW{}
 
-.CUSTOM{}
+.CUSTOM{
+}
 .ONES{}
 .TWOS{}
 .THREES{}
@@ -251,7 +252,10 @@ color: white;
 .PANZERKRIEG_2v2 {}
 .PANZERKRIEG_TEAM_2v2 {}
 .PANZERKRIEG_TEAM_3v3 {}
-.COMPSTOMP {}
+.COMPSTOMP {
+
+
+}
 .ASSAULT {}
 .PANZERKRIEG  {}
 .STONEWALL {} 
