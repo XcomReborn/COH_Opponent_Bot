@@ -7,11 +7,22 @@ from classes.oppbot_match_type import MatchType
 class PlayerStat:
     "Human player stats."
 
-    def __init__(self, statdata, availableLeaderboards, steamNumber):
+    def __init__(self, statdata = None,
+                availableLeaderboards = None,
+                steamNumber = None):
 
         # steamNumber is required in addition to statData
         # to compare the steamNumber to the internal profiles
         # that can contain other profile info
+
+        if not statdata:
+            return
+        
+        if not availableLeaderboards:
+            return
+        
+        if not steamNumber:
+            return
 
         self.leaderboardData = {}
         self.totalWins = 0
@@ -27,76 +38,61 @@ class PlayerStat:
 
         statString = "/steam/"+str(steamNumber)
 
-        if statdata:
-            result = statdata.get('result')
-            message = result.get('message')
-            if (message == "SUCCESS"):
-                for item in statdata.get('statGroups'):
-                    for value in item.get('members'):
-                        if (value.get('name') == statString):
-                            self.profile_id = value.get('profile_id')
-                            self.alias = value.get('alias')
-                            self.steamString = value.get('name')
-                            self.country = value.get('country')
-                if statdata.get('leaderboardStats'):
 
-                    for item in statdata.get('leaderboardStats'):
-                        item_leaderboard_id = item.get('leaderboard_id')
-                        if item_leaderboard_id:
-                            leaderboards = availableLeaderboards.get(
-                                'leaderboards'
-                            )
-                            leaderboard = None
-                            for index in leaderboards:
-                                if index.get('id') == item_leaderboard_id:
-                                    try:
-                                        leaderboard = (
-                                            leaderboards[item_leaderboard_id])
-                                    except Exception as e:
-                                        logging.error(str(e))
-                                    break
+        result = statdata.get('result')
+        message = result.get('message')
+        if (message == "SUCCESS"):
+            for item in statdata.get('statGroups'):
+                for value in item.get('members'):
+                    if (value.get('name') == statString):
+                        self.profile_id = value.get('profile_id')
+                        self.alias = value.get('alias')
+                        self.steamString = value.get('name')
+                        self.country = value.get('country')
+        else:
+            return
 
-                            if leaderboard:
-                                faction = None
-                                matchType = None
-                                lboardmap = leaderboard.get(
-                                    'leaderboardmap')
-                                if lboardmap:
-                                    try:
-                                        faction = Faction(lboardmap[0].get(
-                                            'race_id'))
-                                        matchType = MatchType(lboardmap[0].get(
-                                            'matchtype_id'))
-                                    except Exception as e:
-                                        logging.error(str(e))
+        leaderboards = availableLeaderboards.get('leaderboards')
+        leaderboardStats = statdata.get('leaderboardStats')
 
-                                self.leaderboardData[leaderboard.get('id')] = (
-                                    FactionResult(
+        for index, stat in enumerate(leaderboardStats):
+            leaderboard_id = stat.get('leaderboard_id')
 
-                                        faction=faction,
-                                        matchType=matchType,
-                                        name=leaderboard.get('name'),
-                                        leaderboard_id=item.get(
-                                            'leaderboard_id'),
-                                        wins=item.get('wins'),
-                                        losses=item.get('losses'),
-                                        streak=item.get('streak'),
-                                        disputes=item.get('disputes'),
-                                        drops=item.get('drops'),
-                                        rank=item.get('rank'),
-                                        rankLevel=item.get('ranklevel'),
-                                        lastMatch=item.get('lastMatchDate')
-                                    )
-                                )
+            leaderboard = leaderboards[leaderboard_id]
 
-        for id in self.leaderboardData:
+            name = leaderboard.get('name')
+            isranked = leaderboard.get('isranked')
+            lbm = leaderboard.get('leaderboardmap')
+            match_type = MatchType(lbm[0].get('matchtype_id'))
+            faction = Faction(lbm[0].get('race_id'))
+            # make leaderboard
+            self.leaderboardData[index] = (
+            FactionResult(
+
+                faction=faction,
+                matchType=match_type,
+                name=name,
+                leaderboard_id=stat.get(
+                    'leaderboard_id'),
+                wins=stat.get('wins'),
+                losses=stat.get('losses'),
+                streak=stat.get('streak'),
+                disputes=stat.get('disputes'),
+                drops=stat.get('drops'),
+                rank=stat.get('rank'),
+                rankLevel=stat.get('ranklevel'),
+                lastMatch=stat.get('lastMatchDate')
+            )
+            )
+
+        for leaderboard_id in self.leaderboardData:
 
             try:
-                self.totalWins += int(self.leaderboardData[id].wins)
+                self.totalWins += int(self.leaderboardData[leaderboard_id].wins)
             except Exception as e:
                 logging.error(str(e))
             try:
-                self.totalLosses += int(self.leaderboardData[id].losses)
+                self.totalLosses += int(self.leaderboardData[leaderboard_id].losses)
             except Exception as e:
                 logging.error(str(e))
 
