@@ -157,7 +157,7 @@ class GameData():
 
         statList = []
 
-        if not self.live_game:
+        if self.live_game:
             # Don't bother trying to get steam numbers and stats if replay
             statList = self.get_stats_from_game()
 
