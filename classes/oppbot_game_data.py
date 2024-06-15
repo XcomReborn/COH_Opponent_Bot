@@ -343,10 +343,8 @@ class GameData():
                         addr = self.pm.read_int(addr + offset)
                 return addr + offsets[-1]
 
-
         except Exception as e:
-            if e:
-                return None
+            return None
 
     def get_COH_memory_address(self) -> bool:
         "Gets the active process for RelicCOH.exe"
@@ -354,14 +352,12 @@ class GameData():
         try:
             self.pm = pymem.Pymem("RelicCOH.exe")
         except Exception as e:
-            pass
+            self.cohRunning = False
+            return False
         if self.pm:
             self.base_address = self.pm.base_address
             self.cohRunning = True
             return True
-        else:
-            self.cohRunning = False
-            return False
 
     def get_replayParser_by_pointer(self) -> ReplayParser:
         "Gets an instance of the replayParser containing COH game info."
@@ -378,16 +374,6 @@ class GameData():
         # 2
         cohrecReplayAddress = 0x00902030
         cohrecOffsets = [0x28, 0x160, 0x4, 0x84, 0x24, 0x110, 0x0]
-        myListOfCOHRECPointers.append([cohrecReplayAddress, cohrecOffsets])
-
-        # 3
-        cohrecReplayAddress = 0x00902030
-        cohrecOffsets = [0x4, 0x160, 0x4, 0x118, 0x110, 0x0]
-        myListOfCOHRECPointers.append([cohrecReplayAddress, cohrecOffsets])
-
-        # 4
-        cohrecReplayAddress = 0x00902030
-        cohrecOffsets = [0x4, 0x160, 0x4, 0x110, 0x110, 0x0]
         myListOfCOHRECPointers.append([cohrecReplayAddress, cohrecOffsets])
 
         for count, item in enumerate(myListOfCOHRECPointers):
