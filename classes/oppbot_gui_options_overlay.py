@@ -531,10 +531,10 @@ class OptionsOverlay:
         )
         self.entry_css_unranked.grid(row=2, column=1)
 
-        if(self.settings.data.get('css_style_custom')):
+        if(self.settings.data.get('css_style_unranked')):
             self.entry_css_unranked.insert(
                 0,
-                str(self.settings.data.get('css_style_custom')))
+                str(self.settings.data.get('css_style_unranked')))
 
         self.entry_css_unranked.config(state=DISABLED)
 
