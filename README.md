@@ -5,20 +5,26 @@ Current Version :
 ![Version_v5-0k](https://github.com/XcomReborn/COH_Opponent_Bot/assets/4015491/413be163-d795-4b3c-aee0-897ba9786604)
 
 
-General information and how it works:
+# General information:
 
-The COH_Opponent_Bot is an application for finding and displaying in game user statistics for yourself and your opponents while playing the computer game
-Company Of Heroes (COH) on the steam distribution platform for personal computers (PC). Its can run in the background and output the results while the game
-is in progress to either its in-built console, a web-browser that can be stand-alone or for use as an overlay, or in a selected chat channel of the computer game streaming platform twitch.tv.
+The COH_Opponent_Bot is an application for finding and displaying user statistics for you and your opponents while playing the computer game
+Company Of Heroes (COH) on the steam distribution platform.
+
+Its can run in the background and output the results while the game is in progress to either its in-built console, a web-browser or used as an overlay. 
+
+The output can also be custom formatted and send to a selected chat channel on the streaming platform twitch.tv.
+
+
+# How it works:
 
 The application periodically reads the game application memory looking for the internal game replay file.
 
 Once it finds it, it parses that information using a simple game header replay parser and gets the opponent information.
 
-The program also contacts the relic statistic rank server via a proxy and gets data for each player including wins,losses,ranks,levels ... etc.
+The program also contacts the relic statistic rank server via a proxy and gets data for each player including wins, losses, ranks, levels ... etc.
 
 
-It is for use with COH 1 only. (And only for Windows, tested only on Windows 10) because it relies on reading windows memory.
+It is for use with COH 1 only on personal computer (PC). (And only for Windows, tested only on Windows 10) because it relies on libraries for reading windows application memory.
 
 
 # A precompiled windows 10 compatible executable can be downloaded :
