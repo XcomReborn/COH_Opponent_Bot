@@ -150,9 +150,9 @@ class GameData():
         self.modName = replay_parser.modName
 
         for item in replay_parser.playerList:
-            username = item.get('name')
-            factionString = item.get('faction')
-            player = Player(name=username, faction_name=factionString)
+            name = item.get('name')
+            faction_name = item.get('faction')
+            player = Player(name=name, faction_name=faction_name)
             self.playerList.append(player)
 
         logging.info(self.playerList)
@@ -165,10 +165,17 @@ class GameData():
         # to see if that player had a steam number
 
         cpuCounter = 0
+        humanCounter = 0
 
         for item in self.playerList:
             if ("CPU" in item.name):
                 cpuCounter += 1
+            else:
+                # ignore empty slots with no faction
+                if (item.faction):
+                    humanCounter += 1
+
+        logging.info(cpuCounter)
 
         statList = []
 
@@ -178,8 +185,7 @@ class GameData():
             # check if number of stats recieved is equal to or greater than
             # the number of humans, if not stats collection has failed
             # return false so the caller can try again later.
-            expected_stats = len(self.playerList) - cpuCounter
-            if not (len(statList) >= expected_stats):
+            if not (len(statList) >= humanCounter):
                 return False
 
         for player in self.playerList:
@@ -1345,7 +1351,7 @@ class GameData():
             else:
 
                 for item in team1List:
-                    team1 += str(item.name) 
+                    team1 += str(item.name)
                 for item in team2List:
                     team2 += str(item.name)
 

@@ -192,7 +192,7 @@ top: 0pt;
       color: white;
       float: right;
       overflow: hidden;
-      text-align: left;
+      text-align: right;
       padding-bottom: 0pt;
       padding: auto;
       }
@@ -211,7 +211,7 @@ color: white;
       color: white;
       float:left;
       overflow:auto;
-      text-align: right;
+      text-align: lef;
       padding: auto;
 
   }
