@@ -155,8 +155,8 @@ class GameData():
             player = Player(name=name, faction_name=faction_name)
             self.playerList.append(player)
 
-        logging.info(self.playerList)
-        logging.info(len(self.playerList))
+        #logging.info(self.playerList)
+        #logging.info(len(self.playerList))
 
         # Get the number of computers if any by name
         # this number could be wrong is a player decided to name
@@ -175,7 +175,7 @@ class GameData():
                 if (item.faction):
                     humanCounter += 1
 
-        logging.info(cpuCounter)
+        #logging.info(cpuCounter)
 
         statList = []
 
@@ -211,7 +211,7 @@ class GameData():
                             self.settings.save()
 
                 # try to do some debugging here.
-                logging.info(player)
+                #logging.info(player)
 
         humans = sum(item.stats is not None for item in self.playerList)
         self.numberOfHumans = humans
@@ -297,7 +297,8 @@ class GameData():
                 try:
                     rd = self.pm.read_bytes(actualMemoryAddress, 6)
                 except Exception as e:
-                    logging.info(e)
+                    pass
+                    #logging.info(e)
                 if rd:
                     try:
                         # When the menu screen is available the version number
@@ -481,7 +482,7 @@ class GameData():
                 try:
                     rd = self.pm.read_bytes(actualCOHRECMemoryAddress, 4000)
                 except Exception as e:
-                    print(e)
+                    pass
                 if rd:
                     if rd[4:12] == bytes("COH__REC".encode('ascii')):
                         # if COH__REC is present then the 
@@ -658,7 +659,7 @@ class GameData():
                                     f"Got steamNumber from memory "
                                     f"{str(steamNumber[7:24])}"
                                 )
-                                logging.info(info)
+                                #logging.info(info)
                                 sNumber = str(steamNumber[7:24])
                                 steamnumber_list.append(sNumber)
                                 break
