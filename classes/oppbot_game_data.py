@@ -427,13 +427,10 @@ class GameData():
 
         if not self.pm:
             return
-
         try:
             addr = self.pm.read_int(base)
-            for count, offset in enumerate(offsets):
-                    if count == len(offsets) - 1:
-                        break
-                    addr = self.pm.read_int(addr + offset)
+            for i in range(len(offsets)-1):
+                addr = self.pm.read_ulong(addr + offsets[i])
             return addr + offsets[-1]
 
         except Exception as e:
@@ -590,6 +587,8 @@ class GameData():
         replayAddress = 0x00902030
         cohrecOffsets = [0x28, 0x160, 0x4, 0xE90, 0x8CC, 0x0]
         replay_path_pointers.append([replayAddress, cohrecOffsets])
+
+        rd = None
 
         for count, item in enumerate(replay_path_pointers):
             ad = self.get_pointer_address(baseAddress + item[0], item[1])
