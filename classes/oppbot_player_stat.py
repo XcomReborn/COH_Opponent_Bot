@@ -7,22 +7,14 @@ from classes.oppbot_match_type import MatchType
 class PlayerStat:
     "Human player stats."
 
-    def __init__(self, statdata = None,
-                availableLeaderboards = None,
-                steamNumber = None):
+    def __init__(self,
+                statdata,
+                availableLeaderboards,
+                steamNumber):
 
         # steamNumber is required in addition to statData
         # to compare the steamNumber to the internal profiles
         # that can contain other profile info
-
-        if not statdata:
-            return
-        
-        if not availableLeaderboards:
-            return
-        
-        if not steamNumber:
-            return
 
         self.leaderboardData = {}
         self.totalWins = 0
@@ -37,7 +29,6 @@ class PlayerStat:
         self.cohstatsLink = None
 
         statString = "/steam/"+str(steamNumber)
-
 
         result = statdata.get('result')
         message = result.get('message')

@@ -150,16 +150,37 @@ class GameData():
         self.modName = replay_parser.modName
 
         for item in replay_parser.playerList:
-            username = item['name']
-            factionString = item['faction']
+            username = item.get('name')
+            factionString = item.get('faction')
             player = Player(name=username, faction_name=factionString)
             self.playerList.append(player)
+
+        logging.info(self.playerList)
+        logging.info(len(self.playerList))
+
+        # Get the number of computers if any by name
+        # this number could be wrong is a player decided to name
+        # themselves the same as a computer
+        # therefore we check this again after we recieve stats
+        # to see if that player had a steam number
+
+        cpuCounter = 0
+
+        for item in self.playerList:
+            if ("CPU" in item.name):
+                cpuCounter += 1
 
         statList = []
 
         if self.live_game:
             # Don't bother trying to get steam numbers and stats if replay
             statList = self.get_stats_from_game()
+            # check if number of stats recieved is equal to or greater than
+            # the number of humans, if not stats collection has failed
+            # return false so the caller can try again later.
+            expected_stats = len(self.playerList) - cpuCounter
+            if not (len(statList) >= expected_stats):
+                return False
 
         for player in self.playerList:
             if statList:
@@ -183,6 +204,9 @@ class GameData():
                             self.settings.data['steamAlias'] = ps.alias
                             self.settings.save()
 
+                # try to do some debugging here.
+                logging.info(player)
+
         humans = sum(item.stats is not None for item in self.playerList)
         self.numberOfHumans = humans
 
@@ -205,7 +229,7 @@ class GameData():
                 if ("Expert" in item.name):
                     expertCounter += 1
 
-        self.numberOfComputers = cpuCounter
+
         self.numberOfPlayers = cpuCounter + self.numberOfHumans
         self.easyCPUCount = easyCounter
         self.normalCPUCount = normalCounter
@@ -607,8 +631,8 @@ class GameData():
             return
         
         with Process.open_process(self.pm.process_id) as p:
-            steamNumberList = []
-            steamNumberList.append(self.settings.data.get('steamNumber'))
+            steamnumber_list = []
+            # steamNumberList.append(self.settings.data.get('steamNumber'))
             # add default value incase it isn't found.
             for player in self.playerList:
                 name = bytearray(str(player.name).encode('utf-16le'))
@@ -631,14 +655,14 @@ class GameData():
                                 )
                                 logging.info(info)
                                 sNumber = str(steamNumber[7:24])
-                                steamNumberList.append(sNumber)
+                                steamnumber_list.append(sNumber)
                                 break
                         except Exception as e:
                             if e:
                                 pass
 
                 statList = []
-                for item in steamNumberList:
+                for item in steamnumber_list:
                     statRquest = StatsRequest(settings=self.settings)
                     stat = statRquest.return_stats(item)
                     statList.append(stat)
@@ -715,6 +739,8 @@ class GameData():
                 if stats_request.message:
                     self.send_to_tkconsole(stats_request.message)
                     logging.info(stats_request.message)
+
+        print(self.playerList)
 
         # Prepare outputs
         axis_team = []

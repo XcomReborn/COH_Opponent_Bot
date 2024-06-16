@@ -26,15 +26,6 @@ class FactionResult():
         self.lastTime = None
         self.winLossRatio = None
 
-        if isinstance(self.lastMatch, str):
-            notNone = (str(self.lastMatch) != "None")
-            notEmpty = (str(self.lastMatch) != "")
-            if (notNone and notEmpty):
-                logging.info("self.lastMatch : %s" , self.lastMatch)
-                ts = int(self.lastMatch)
-                utc = datetime.utcfromtimestamp(ts)
-                self.lastTime = str(utc.strftime('%Y-%m-%d %H:%M:%S'))
-
         if "American" in self.name:
             self.nameShort = "US"
 

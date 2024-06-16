@@ -49,8 +49,8 @@ class MemoryMonitor(threading.Thread):
                 # Reference to irc client
                 # may not exist when first started
                 self.gameData.irc_client = self.irc_client
-                self.gameData.get_data_from_game()
-                if self.gameData.game_in_progress:
+                success = self.gameData.get_data_from_game()
+                if self.gameData.game_in_progress and success:
                     # game is in progress
                     if self.game_in_progress != self.gameData.game_in_progress:
                         # the state has changed (game started)
@@ -63,8 +63,8 @@ class MemoryMonitor(threading.Thread):
                     if self.game_in_progress != self.gameData.game_in_progress:
                         # the state has changed (game over)
                         # set the local state to the game state
-                        self.game_in_progress = self.gameData.game_in_progress        
-                        # do game over method                
+                        self.game_in_progress = self.gameData.game_in_progress
+                        # do game over method
                         self.game_over()
 
                 self.event.wait(self.poll_interval)
