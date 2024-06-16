@@ -31,7 +31,7 @@ class Settings:
         self.data['botOAuthKey'] = ""
         self.data['whisperTo'] = "xcoinbetbot"
         self.data['showOwn'] = False
-        self.data['logErrorsToFile'] = True
+        self.data['logErrorsToFile'] = False
         self.data['filePollInterval'] = 10
         self.data['showSteamProfile'] = False
         self.data['automaticTrigger'] = True
