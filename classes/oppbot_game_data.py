@@ -155,8 +155,8 @@ class GameData():
             player = Player(name=name, faction_name=faction_name)
             self.playerList.append(player)
 
-        #logging.info(self.playerList)
-        #logging.info(len(self.playerList))
+        logging.info(self.playerList)
+        logging.info(len(self.playerList))
 
         # Get the number of computers if any by name
         # this number could be wrong is a player decided to name
@@ -171,11 +171,14 @@ class GameData():
             if ("CPU" in item.name):
                 cpuCounter += 1
             else:
-                # ignore empty slots with no faction
-                if (item.faction):
+                # ignore empty slots with no name
+                if (item.name):
                     humanCounter += 1
 
-        #logging.info(cpuCounter)
+        logging.info(f"cpuCounter {cpuCounter}")
+        logging.info(f"humanCounter {humanCounter}")
+        logging.info(f"live game {self.live_game}")
+        
 
         statList = []
 
@@ -186,7 +189,13 @@ class GameData():
             # the number of humans, if not stats collection has failed
             # return false so the caller can try again later.
             if not (len(statList) >= humanCounter):
+                logging.info("stats")
+                logging.info(f"statList size {len(statList)}")
+                logging.info("failed to get info")
                 return False
+            logging.info("got enough stats")
+            logging.info(f"humans {humanCounter}")
+            logging.info(f"stat list {len(statList)}")
 
         for player in self.playerList:
             if statList:
@@ -210,8 +219,9 @@ class GameData():
                             self.settings.data['steamAlias'] = ps.alias
                             self.settings.save()
 
-                # try to do some debugging here.
-                #logging.info(player)
+        # try to do some debugging here.
+        logging.info("after adding stats to players")
+        logging.info(self.playerList)
 
         humans = sum(item.stats is not None for item in self.playerList)
         self.numberOfHumans = humans
@@ -502,10 +512,10 @@ class GameData():
                             return rp
                         logging.info(
                             "Replay Data did not parse correctly.")
-                        self.live_game = False
-                        return None
-        # if unable to find COH__REC in the memory then set live game to false
-        self.live_game = coh_rec_present
+
+        # set if cannot find on either attempt
+        self.live_game = False
+
 
     def get_replayParser_by_search(self) -> ReplayParser | None:
         "Gets an instance of the replayParser containing COH game info."
@@ -640,8 +650,7 @@ class GameData():
         
         with Process.open_process(self.pm.process_id) as p:
             steamnumber_list = []
-            # steamNumberList.append(self.settings.data.get('steamNumber'))
-            # add default value incase it isn't found.
+
             for player in self.playerList:
                 name = bytearray(str(player.name).encode('utf-16le'))
                 buff = bytes(name)
@@ -661,20 +670,21 @@ class GameData():
                                     f"Got steamNumber from memory "
                                     f"{str(steamNumber[7:24])}"
                                 )
-                                #logging.info(info)
+                                logging.info(info)
                                 sNumber = str(steamNumber[7:24])
                                 steamnumber_list.append(sNumber)
                                 break
                         except Exception as e:
                             if e:
                                 pass
+            logging.info(f"steam number list {steamnumber_list}")
 
-                statList = []
-                for item in steamnumber_list:
-                    statRquest = StatsRequest(settings=self.settings)
-                    stat = statRquest.return_stats(item)
-                    statList.append(stat)
-                return statList
+            statList = []
+            for item in steamnumber_list:
+                statRquest = StatsRequest(settings=self.settings)
+                stat = statRquest.return_stats(item)
+                statList.append(stat)
+            return statList
 
     def test_output(self):
         "Produces text output according to Preformat."
