@@ -429,7 +429,9 @@ class GameData():
         if not self.pm:
             return
         try:
-            addr = self.pm.read_int(base)
+            # 64 bit OS requires read_ulong instead of read_int
+            # read_int only works some of the time on 64 bit
+            addr = self.pm.read_ulong(base)
             for i in range(len(offsets)-1):
                 addr = self.pm.read_ulong(addr + offsets[i])
             return addr + offsets[-1]
