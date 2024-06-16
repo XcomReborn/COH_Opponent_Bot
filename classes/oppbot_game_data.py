@@ -1356,7 +1356,8 @@ class GameData():
                 cssFilePath = self.settings.data.get('css_style_unranked')
 
             if (self.matchType == MatchType.CUSTOM or
-                self.matchType.value > 8):
+                self.matchType.value > 8 or
+                not self.live_game):
                     cssFilePath = self.settings.data.get('css_style_custom')
 
             # add match type div surrounding each team
