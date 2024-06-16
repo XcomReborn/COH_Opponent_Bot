@@ -560,7 +560,7 @@ class GameData():
 
                 return characters
         except Exception as e:
-            print(e)
+            pass
 
     def get_replay_parser_from_memory_replays(self):
 
@@ -748,7 +748,6 @@ class GameData():
                     self.send_to_tkconsole(stats_request.message)
                     logging.info(stats_request.message)
 
-        print(self.playerList)
 
         # Prepare outputs
         axis_team = []
