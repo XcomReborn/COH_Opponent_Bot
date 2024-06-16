@@ -275,67 +275,59 @@ class GameData():
 
         return True
 
-    def check_for_game_in_progress(self) -> bool:
+    def check_for_game_in_progress(self):
 
         if not self.pm:
             return
 
         listOfPointers = []
 
-        process_name = "Localizer.dll"
-        address = 0x00013478
-        offsets = [0xA4, 0x0, 0x0]
-        listOfPointers.append([process_name ,address, offsets])
+        # 1 mp
+        address = 0x00901EA8
+        offset =[0xC,0xC,0x18,0x10,0x24,0x18,0x264]
+        listOfPointers.append([address,offset])
+        
+        # 2 mu
+        address = 0x00901EA8
+        offset = [0xC,0xC,0x18,0x10,0x24,0x18,0x26C]
+        listOfPointers.append([address,offset])
 
-        process_name = "Localizer.dll"
-        address = 0x00013478
-        offsets = [0xA4, 0x8, 0x0]
-        listOfPointers.append([process_name ,address, offsets])
+        # 3 fu
+        address = 0x00901EA8
+        offset = [0xC,0xC,0x18,0x10,0x24,0x18,0x268]
+        listOfPointers.append([address,offset])
 
         game_in_progress = False
+       
+        baseAddress = self.pm.base_address
 
-        base_address = pymem.process.module_from_name(self.pm.process_handle, process_name).lpBaseOfDll
+        address_1 =  self.get_pointer_address(baseAddress + listOfPointers[0][0], listOfPointers[0][1])
+        address_2 =  self.get_pointer_address(baseAddress + listOfPointers[1][0], listOfPointers[1][1])
+        address_3 =  self.get_pointer_address(baseAddress + listOfPointers[2][0], listOfPointers[2][1])
 
-        rd = None
+        mp = None
+        mu = None
+        fu = None
 
-        for count, item in enumerate(listOfPointers):
+        try:
 
-            ad = self.get_pointer_address(base_address + item[1], item[2])
-            actualMemoryAddress = ad
+            mp = self.pm.read_float(address_1)
+            mu = self.pm.read_float(address_2)
+            fu = self.pm.read_float(address_3)
+            
+            float(mp)
+            float(mu)
+            float(fu)
 
-            if actualMemoryAddress:
-                try:
-                    rd = self.pm.read_bytes(actualMemoryAddress, 6)
-                except Exception as e:
-                    pass
-                    #logging.info(e)
-                if rd:
-                    try:
-                        # When the menu screen is available the version number
-                        # will be in memory "2.700.2.43" - I just get the first
-                        # 6 bytes of 2 byte wide utf-16le chars
-                        if "2.7" in rd.decode('utf-16le') :
-                            game_in_progress = False
-                            self.game_in_progress = game_in_progress
-                            return False
-                        else:
-                            # if not able to find version string
-                            # not in the main menu
-                            game_in_progress = True
-                            self.game_in_progress = game_in_progress
+        except Exception:
+            self.game_in_progress = False
 
-                    except Exception as e:
-                        # exception maybe thrown due to being unable to
-                        # read the random bytes at this location when  
-                        # not in menu
-                        game_in_progress = True
-                        self.game_in_progress = game_in_progress
-
-        # In the event that rd was none due to read_bytes errors
-        # the game is more likely to be in progress than not.
-        self.game_in_progress = True
-        return self.game_in_progress
-
+        if (mp != None) and (mu != None) and (fu != None):
+            # all values must be valid floats
+            self.game_in_progress = True
+            return
+        # if any value not value the game probably isn't running
+        self.game_in_progress = False
 
     def get_game_description_string(self) -> str:
         "Produces a single-line game description string."
@@ -677,6 +669,7 @@ class GameData():
                         except Exception as e:
                             if e:
                                 pass
+
             logging.info(f"steam number list {steamnumber_list}")
 
             statList = []
