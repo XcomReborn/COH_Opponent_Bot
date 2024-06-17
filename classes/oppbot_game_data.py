@@ -1287,6 +1287,8 @@ class GameData():
             uopf = self.settings.data.get('enable_overlay')
             enable_overlay = bool(uopf)
             if (enable_overlay):
+                # player team 1 will always be players 1 - 4
+                player_number = 1
                 for item in team1List:
                     pf = self.settings.data.get('overlay_default_left_pf')
                     if (self.matchType == MatchType.ONES):
@@ -1316,9 +1318,15 @@ class GameData():
                         sfDict,
                         overlay=True
                     )
+                    # surround with faction name
                     theString = f'<div class = "{item.faction.name}">{theString}</div>'
+                    # surround with player number
+                    theString = f'<div class = "player{player_number}">{theString}</div>'
+                    player_number += 1
                     team1 += str(theString)
-
+                
+                # player team 1 will always be players 5 - 8
+                player_number = 5
                 for item in team2List:
                     pf = self.settings.data.get('overlay_default_right_pf')
                     if (self.matchType == MatchType.ONES):
@@ -1350,7 +1358,11 @@ class GameData():
                         sfDict,
                         overlay=True
                     )
+                    # surround with faction name
                     theString = f'<div class = "{item.faction.name}">{theString}</div>'
+                    # surround with player number
+                    theString = f'<div class = "player{player_number}">{theString}</div>'
+                    player_number += 1
                     team2 += str(theString)
             else:
 

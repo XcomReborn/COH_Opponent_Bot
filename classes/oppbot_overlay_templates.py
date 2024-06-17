@@ -302,70 +302,69 @@ color: white;
   }
 
 .US{
-
 }
 .WM{
-
 }
 .PE{
-
 }
 .CW{
-
 }
 
 .CUSTOM{
-
 }
 .ONES{
-
 }
 .TWOS{
-
 }
 .THREES{
-
 }
 .FOURS{
-
 } 
 .TEAM_2v2{
-
 }
 .TEAM_3V3 {
-
 }
 .TEAM_4V4 {
-
 }
 .ASSAULT_2V2 {
-
 }
 .ASSAULT_TEAM_2V2 {
-
 }
 .ASSAULT_TEAM_3V3 {
-
 }
 .PANZERKRIEG_2v2 {
-
 }
 .PANZERKRIEG_TEAM_2v2 {
-
 }
 .PANZERKRIEG_TEAM_3v3 {
-
 }
 .COMPSTOMP {
-
 }
 .ASSAULT {
-
 }
-.PANZERKRIEG  {
-
+.PANZERKRIEG {
 }
 .STONEWALL {
-
 } 
+
+/* players 1-4 will always be on the player team */
+.player1 {
+}
+.player2 {
+}
+.player3 {
+}
+.player4 {
+}
+
+/* players 5-8 will always be on the opponent team */
+.player5 {
+}
+.player6 {
+}
+.player7 {
+}
+.player8 {
+}
+
     """

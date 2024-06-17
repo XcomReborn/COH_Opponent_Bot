@@ -21,7 +21,7 @@ class Settings:
         self.privatedata = {}
 
         # Manually update for about box.
-        self.privatedata['version_number'] = "5.2.4"
+        self.privatedata['version_number'] = "5.2.5"
         self.privatedata['build_date'] = "17-JUN-2024"
 
         # custom display toggles
@@ -45,26 +45,30 @@ class Settings:
         self.data['enable_overlay'] = True
         self.data['enable_twitch_bot'] = True
 
-        temp = "$NAME$ $FACTIONICON$<BR>"
+        temp = "$FACTIONICON$ $NAME$<BR>"
         self.data['overlay_default_left_pf'] = temp
         temp = "$NAME$ ($FLAGICON$) $LEVELICON$ $RANK$ $FACTIONICON$<BR>"
         self.data['overlay_1v1_left_pf'] = temp
         self.data['overlay_2v2_left_pf'] = temp
-        temp = "$NAME$ $FACTIONICON$<BR>"
+        temp = "$NAME$ ($FLAGICON$) $LEVELICON$ $FACTIONICON$<BR>"
         self.data['overlay_3v3_left_pf'] = temp
+        temp = "$NAME$ $FACTIONICON$<BR>"
         self.data['overlay_4v4_left_pf'] = temp
+        temp = "$NAME$ ($FLAGICON$) $LEVELICON$ $FACTIONICON$<BR>"
         self.data['overlay_custom_left_pf'] = temp
 
         self.data['mirrorLeftToRightOverlay'] = True
 
-        temp = "$FACTIONICON$ $NAME$<BR>"
+        temp = "$NAME$ $FACTIONICON$<BR>"
         self.data['overlay_default_right_pf'] = temp
         temp = "$FACTIONICON$ $RANK$ $LEVELICON$ ($FLAGICON$) $NAME$<BR>"
         self.data['overlay_1v1_right_pf'] = temp
         self.data['overlay_2v2_right_pf'] = temp
-        temp = "$FACTIONICON$ $NAME$<BR>"
+        temp = "$FACTIONICON$ $LEVELICON$ ($FLAGICON$) $NAME$<BR>"
         self.data['overlay_3v3_right_pf'] = temp
+        temp = "$FACTIONICON$ $NAME$<BR>"
         self.data['overlay_4v4_right_pf'] = temp
+        temp = "$FACTIONICON$ ($FLAGICON$) $NAME$<BR>"
         self.data['overlay_custom_right_pf'] = temp
 
         temp = ("Name : $NAME$<BR>\n"
@@ -97,9 +101,11 @@ class Settings:
         
         self.data['overlay_display_pf'] = temp
 
-        temp = os.path.normpath("styles/overlay_style.css")
+        temp = os.path.normpath("styles/overlay_style_custom.css")
         self.data['css_style_custom'] = temp
+        temp = os.path.normpath("styles/overlay_style.css")
         self.data['css_style_ranked'] = temp
+        temp = os.path.normpath("styles/overlay_style.css")
         self.data['css_style_unranked'] = temp
         
         temp = os.path.normpath("styles/overlay_display_style.css")

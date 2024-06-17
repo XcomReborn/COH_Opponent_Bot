@@ -185,4 +185,16 @@ html {}
 .COMPSTOMP {}
 .ASSAULT {}
 .PANZERKRIEG  {}
-.STONEWALL {} 
+.STONEWALL {}
+
+/* players 1-4 will always be on the player team */
+.player1 {}
+.player2 {}
+.player3 {}
+.player4 {}
+
+/* players 5-8 will always be on the opponent team */
+.player5 {}
+.player6 {}
+.player7 {}
+.player8 {}
