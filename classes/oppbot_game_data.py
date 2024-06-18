@@ -1320,9 +1320,14 @@ class GameData():
                     )
                     # surround with faction name
                     theString = f'<div class = "{item.faction.name}">{theString}</div>'
+                    # if main player surround with player_main div
+                    if str(item.name) == str(self.settings.data.get('steamAlias')):
+                        theString = f'<div class = "player_main">{theString}</div>'
                     # surround with player number
-                    theString = f'<div class = "player{player_number}">{theString}</div>'
+                    theString = f'\n<div class = "player{player_number}">{theString}</div>'
                     player_number += 1
+
+
                     team1 += str(theString)
                 
                 # player team 1 will always be players 5 - 8
@@ -1361,8 +1366,9 @@ class GameData():
                     # surround with faction name
                     theString = f'<div class = "{item.faction.name}">{theString}</div>'
                     # surround with player number
-                    theString = f'<div class = "player{player_number}">{theString}</div>'
+                    theString = f'\n<div class = "player{player_number}">{theString}</div>'
                     player_number += 1
+
                     team2 += str(theString)
             else:
 
@@ -1383,8 +1389,8 @@ class GameData():
                     cssFilePath = self.settings.data.get('css_style_custom')
 
             # add match type div surrounding each team
-            team1 = f'<div class = "{self.matchType.name}">{team1}</div>'
-            team2 = f'<div class = "{self.matchType.name}">{team2}</div>'
+            team1 = f'<div class = "{self.matchType.name}">{team1}\n</div>'
+            team2 = f'<div class = "{self.matchType.name}">{team2}\n</div>'
 
             # check if css file exists
             # and if not output the default template to folder
