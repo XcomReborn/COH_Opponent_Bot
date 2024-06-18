@@ -21,8 +21,8 @@ class Settings:
         self.privatedata = {}
 
         # Manually update for about box.
-        self.privatedata['version_number'] = "5.2.5"
-        self.privatedata['build_date'] = "17-JUN-2024"
+        self.privatedata['version_number'] = "5.2.6"
+        self.privatedata['build_date'] = "18-JUN-2024"
 
         # custom display toggles
         # what to show in stat string constuct
