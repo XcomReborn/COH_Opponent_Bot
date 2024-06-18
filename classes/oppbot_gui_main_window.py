@@ -438,9 +438,12 @@ class GUIMainWindow:
 
         self.master.mainloop()
 
-    @staticmethod
-    def open_overlay_browser():
+    #@staticmethod
+    def open_overlay_browser(self):
         try:
+            game_data = GameData(settings=self.settings)
+            game_data.get_data_from_game()
+            game_data.output_opponent_data()
             webbrowser.open("overlay.html", new=2)
         except Exception as e:
             logging.error(str(e))
