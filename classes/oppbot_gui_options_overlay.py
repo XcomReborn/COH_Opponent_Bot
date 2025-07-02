@@ -11,7 +11,7 @@ from tkinter import ttk
 import tkinter.scrolledtext
 import webbrowser
 
-from tktooltip import ToolTip
+from TkToolTip import ToolTip
 from tkinter import ttk
 
 from classes.oppbot_game_data import GameData
@@ -446,7 +446,7 @@ class OptionsOverlay:
 
         self.frame_css_file_path = tkinter.LabelFrame(
             self.frame,
-            text="CSS Format Files",
+            text="CSS Format File",
             padx=5,
             pady=5)
         self.frame_css_file_path.grid(sticky=N+W+E)
@@ -485,69 +485,88 @@ class OptionsOverlay:
 
         # CSS Label Ranked
 
-        self.label_css_ranked = tkinter.Label(
-            self.frame_css_file_path,
-            text="Ranked CSS Path"
-        )
-        self.label_css_ranked.grid(row=1, column=0, sticky=W)
+        # self.label_css_ranked = tkinter.Label(
+        #     self.frame_css_file_path,
+        #     text="Ranked CSS Path"
+        # )
+        # self.label_css_ranked.grid(row=1, column=0, sticky=W)
 
-        # CSS Entry Ranked
+        # # CSS Entry Ranked
 
-        self.entry_css_ranked = tkinter.Entry(
-            self.frame_css_file_path,
-            width=49
-        )
-        self.entry_css_ranked.grid(row=1, column=1)
+        # self.entry_css_ranked = tkinter.Entry(
+        #     self.frame_css_file_path,
+        #     width=49
+        # )
+        # self.entry_css_ranked.grid(row=1, column=1)
 
-        if(self.settings.data.get('css_style_ranked')):
-            self.entry_css_ranked.insert(
-                0,
-                str(self.settings.data.get('css_style_ranked')))
+        # if(self.settings.data.get('css_style_ranked')):
+        #     self.entry_css_ranked.insert(
+        #         0,
+        #         str(self.settings.data.get('css_style_ranked')))
 
-        self.entry_css_ranked.config(state=DISABLED)
+        # self.entry_css_ranked.config(state=DISABLED)
 
-        # CSS Browse Button Ranked
+        # # CSS Browse Button Ranked
 
-        self.button_css_ranked_path = tkinter.Button(
-            self.frame_css_file_path,
-            text="Browse",
-            command=self.browse_css_ranked_path)
-        self.button_css_ranked_path.config(width=10)
-        self.button_css_ranked_path.grid(row=1, column=2, sticky=W)
+        # self.button_css_ranked_path = tkinter.Button(
+        #     self.frame_css_file_path,
+        #     text="Browse",
+        #     command=self.browse_css_ranked_path)
+        # self.button_css_ranked_path.config(width=10)
+        # self.button_css_ranked_path.grid(row=1, column=2, sticky=W)
 
-        # CSS Label Unranked
+        # # CSS Label Unranked
 
-        self.label_css_unranked = tkinter.Label(
-            self.frame_css_file_path,
-            text="Unranked CSS Path"
-        )
-        self.label_css_unranked.grid(row=2, column=0, sticky=W)
+        # self.label_css_unranked = tkinter.Label(
+        #     self.frame_css_file_path,
+        #     text="Unranked CSS Path"
+        # )
+        # self.label_css_unranked.grid(row=2, column=0, sticky=W)
 
-        # CSS Entry Unranked
+        # # CSS Entry Unranked
 
-        self.entry_css_unranked = tkinter.Entry(
-            self.frame_css_file_path,
-            width=49
-        )
-        self.entry_css_unranked.grid(row=2, column=1)
+        # self.entry_css_unranked = tkinter.Entry(
+        #     self.frame_css_file_path,
+        #     width=49
+        # )
+        # self.entry_css_unranked.grid(row=2, column=1)
 
-        if(self.settings.data.get('css_style_unranked')):
-            self.entry_css_unranked.insert(
-                0,
-                str(self.settings.data.get('css_style_unranked')))
+        # if(self.settings.data.get('css_style_unranked')):
+        #     self.entry_css_unranked.insert(
+        #         0,
+        #         str(self.settings.data.get('css_style_unranked')))
 
-        self.entry_css_unranked.config(state=DISABLED)
+        # self.entry_css_unranked.config(state=DISABLED)
 
-        # CSS Browse Button Unranked
+        # # CSS Browse Button Unranked
 
-        self.button_css_unranked_path = tkinter.Button(
-            self.frame_css_file_path,
-            text="Browse",
-            command=self.browse_css_unranked_path)
-        self.button_css_unranked_path.config(width=10)
-        self.button_css_unranked_path.grid(row=2, column=2, sticky=W)
+        # self.button_css_unranked_path = tkinter.Button(
+        #     self.frame_css_file_path,
+        #     text="Browse",
+        #     command=self.browse_css_unranked_path)
+        # self.button_css_unranked_path.config(width=10)
+        # self.button_css_unranked_path.grid(row=2, column=2, sticky=W)
 
         # Stats Display PreFormat
+
+        self.frame_local_html_server = tkinter.LabelFrame(
+                self.frame,
+                text="Local HTML Server",
+                padx=5,
+                pady=5)
+
+        self.frame_local_html_server.grid(sticky=N+S+W+E)
+        self.frame_local_html_server.grid_rowconfigure(0, weight=1)
+        self.frame_local_html_server.grid_columnconfigure(0, weight=1)
+
+        self.button_start_html_server = tkinter.Button(
+            self.frame_local_html_server,
+            text="Start Local HTML Server",
+            command=self.main_window.start_local_html_server)
+        
+        self.button_start_html_server.grid(sticky=W+E, row=0, column=0)
+        
+
 
         self.frame_stats_pf = tkinter.LabelFrame(
                 self.frame,
@@ -993,55 +1012,55 @@ class OptionsOverlay:
 
         self.main_window.enable_buttons()
 
-    def browse_css_ranked_path(self):
-        "browse CSS file path."
-        self.main_window.disable_everything()
-        cwd = os.getcwd()
-        filename = tkinter.filedialog.askopenfilename(
-            initialdir=cwd,
-            title="Select location of CSS file",
-            filetypes=(("css file", "*.css"), ("all files", "*.*")))
+    # def browse_css_ranked_path(self):
+    #     "browse CSS file path."
+    #     self.main_window.disable_everything()
+    #     cwd = os.getcwd()
+    #     filename = tkinter.filedialog.askopenfilename(
+    #         initialdir=cwd,
+    #         title="Select location of CSS file",
+    #         filetypes=(("css file", "*.css"), ("all files", "*.*")))
 
-        if os.path.isfile(filename):
-            filename = os.path.relpath(filename, cwd)
-            self.settings.data['css_style_ranked'] = filename
-            self.entry_css_ranked.config(state=NORMAL)
-            self.entry_css_ranked.delete(0, tkinter.END)
-            css_path = self.settings.data.get('css_style_ranked')
-            if css_path:
-                self.entry_css_ranked.insert(0, str(css_path))
-            self.entry_css_ranked.config(state=DISABLED)
-            self.settings.save()
-            if self.main_window.coh_memory_monitor:
-                self.main_window.coh_memory_monitor.settings = self.settings
-
-
-        self.main_window.enable_buttons()
-
-    def browse_css_unranked_path(self):
-        "browse CSS file path."
-        self.main_window.disable_everything()
-        cwd = os.getcwd()
-        filename = tkinter.filedialog.askopenfilename(
-            initialdir=cwd,
-            title="Select location of CSS file",
-            filetypes=(("css file", "*.css"), ("all files", "*.*")))
-
-        if os.path.isfile(filename):
-            filename = os.path.relpath(filename, cwd)
-            self.settings.data['css_style_unranked'] = filename
-            self.entry_css_unranked.config(state=NORMAL)
-            self.entry_css_unranked.delete(0, tkinter.END)
-            css_path = self.settings.data.get('css_style_unranked')
-            if css_path:
-                self.entry_css_unranked.insert(0, str(css_path))
-            self.entry_css_unranked.config(state=DISABLED)
-            self.settings.save()
-            if self.main_window.coh_memory_monitor:
-                self.main_window.coh_memory_monitor.settings = self.settings
+    #     if os.path.isfile(filename):
+    #         filename = os.path.relpath(filename, cwd)
+    #         self.settings.data['css_style_ranked'] = filename
+    #         self.entry_css_ranked.config(state=NORMAL)
+    #         self.entry_css_ranked.delete(0, tkinter.END)
+    #         css_path = self.settings.data.get('css_style_ranked')
+    #         if css_path:
+    #             self.entry_css_ranked.insert(0, str(css_path))
+    #         self.entry_css_ranked.config(state=DISABLED)
+    #         self.settings.save()
+    #         if self.main_window.coh_memory_monitor:
+    #             self.main_window.coh_memory_monitor.settings = self.settings
 
 
-        self.main_window.enable_buttons()
+    #     self.main_window.enable_buttons()
+
+    # def browse_css_unranked_path(self):
+    #     "browse CSS file path."
+    #     self.main_window.disable_everything()
+    #     cwd = os.getcwd()
+    #     filename = tkinter.filedialog.askopenfilename(
+    #         initialdir=cwd,
+    #         title="Select location of CSS file",
+    #         filetypes=(("css file", "*.css"), ("all files", "*.*")))
+
+    #     if os.path.isfile(filename):
+    #         filename = os.path.relpath(filename, cwd)
+    #         self.settings.data['css_style_unranked'] = filename
+    #         self.entry_css_unranked.config(state=NORMAL)
+    #         self.entry_css_unranked.delete(0, tkinter.END)
+    #         css_path = self.settings.data.get('css_style_unranked')
+    #         if css_path:
+    #             self.entry_css_unranked.insert(0, str(css_path))
+    #         self.entry_css_unranked.config(state=DISABLED)
+    #         self.settings.save()
+    #         if self.main_window.coh_memory_monitor:
+    #             self.main_window.coh_memory_monitor.settings = self.settings
+
+
+    #     self.main_window.enable_buttons()
 
     def browse_css_display_file_path_button(self):
         "browse CSS file path."

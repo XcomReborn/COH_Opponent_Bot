@@ -24,7 +24,7 @@ from tkinter import (
 
 from tkinter.ttk import Style
 from tkinter import ttk
-from tktooltip import ToolTip
+from TkToolTip import ToolTip
 
 from queue import Queue
 
@@ -757,6 +757,9 @@ class GUIMainWindow:
             settings=self.settings,
             tkconsole=self.txt_console)
         self.coh_memory_monitor.start()
+
+    def start_local_html_server(self):
+        print("Starting Local HTML Server")
 
 
     def on_closing(self):

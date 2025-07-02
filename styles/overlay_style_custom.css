@@ -206,13 +206,13 @@ color: white;
 .playerTeam {
 
       position: relative;
-      width: auto;
+      display: inline;
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
       float:left;
-      overflow:auto;
-      text-align: lef;
+      text-align: left;
       padding: auto;
+      overflow: hidden;
 
   }
 

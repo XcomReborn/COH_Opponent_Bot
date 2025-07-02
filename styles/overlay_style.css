@@ -210,6 +210,7 @@ color: white;
       margin-right: 58%;
       text-align: right;
       padding-bottom: 0pt;
+      overflow: hidden;
 
   }
 
@@ -232,10 +233,14 @@ color: white;
 
   }
 
+/* Factions */
+
 .US{}
 .WM{}
 .PE{}
 .CW{}
+
+/* Match types */
 
 .CUSTOM{}
 .ONES{}
@@ -255,6 +260,10 @@ color: white;
 .ASSAULT {}
 .PANZERKRIEG  {}
 .STONEWALL {}
+
+/* AUTOMATCH surrounds both teams if the match is automatch */
+.AUTOMATCH {}
+
 
 /* players 1-4 will always be on the player team */
 .player1 {}

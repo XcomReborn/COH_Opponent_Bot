@@ -1378,19 +1378,26 @@ class GameData():
                     team2 += str(item.name)
 
 
-            if self.automatch:
-                cssFilePath = self.settings.data.get('css_style_ranked')
-            else:
-                cssFilePath = self.settings.data.get('css_style_unranked')
+            # if self.automatch:
+            #     cssFilePath = self.settings.data.get('css_style_ranked')
+            # else:
+            #     cssFilePath = self.settings.data.get('css_style_unranked')
 
-            if (self.matchType == MatchType.CUSTOM or
-                self.matchType.value > 8 or
-                not self.live_game):
-                    cssFilePath = self.settings.data.get('css_style_custom')
+            # if (self.matchType == MatchType.CUSTOM or
+            #     self.matchType.value > 8 or
+            #     not self.live_game):
+            #         cssFilePath = self.settings.data.get('css_style_custom')
+
+            cssFilePath = self.settings.data.get('css_style_custom')
 
             # add match type div surrounding each team
             team1 = f'<div class = "{self.matchType.name}">{team1}\n</div>'
             team2 = f'<div class = "{self.matchType.name}">{team2}\n</div>'
+
+            # use AUTOMATCH as css tag if automatch is enabled
+            if self.automatch:
+                team1 = f'<div class = "AUTOMATCH">{team1}\n</div>'
+                team2 = f'<div class = "AUTOMATCH">{team2}\n</div>'
 
             # check if css file exists
             # and if not output the default template to folder

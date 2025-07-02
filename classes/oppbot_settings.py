@@ -97,16 +97,20 @@ class Settings:
                 "$COHSTATSLINK$<BR>\n"
                 "$STEAMPROFILE$<BR>\n"
                 "<BR>\n"
-                "<BR>\n")
-        
+                "<BR>\n")        
         self.data['overlay_display_pf'] = temp
 
-        temp = os.path.normpath("styles/overlay_style_custom.css")
+        temp = os.path.normpath("styles/overlay_style.css")
         self.data['css_style_custom'] = temp
-        temp = os.path.normpath("styles/overlay_style.css")
-        self.data['css_style_ranked'] = temp
-        temp = os.path.normpath("styles/overlay_style.css")
-        self.data['css_style_unranked'] = temp
+
+        # temp = os.path.normpath("styles/overlay_style.css")
+        # self.data['css_style_ranked'] = temp
+        # temp = os.path.normpath("styles/overlay_style.css")
+        # self.data['css_style_unranked'] = temp
+
+        # local html server settings
+        self.data['html_server_enabled'] = False
+        self.data['html_server_port'] = 8888
         
         temp = os.path.normpath("styles/overlay_display_style.css")
         self.data['css_style_display'] = temp
