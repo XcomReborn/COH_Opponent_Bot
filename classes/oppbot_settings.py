@@ -21,8 +21,8 @@ class Settings:
         self.privatedata = {}
 
         # Manually update for about box.
-        self.privatedata['version_number'] = "5.2.6"
-        self.privatedata['build_date'] = "18-JUN-2024"
+        self.privatedata['version_number'] = "5.3.0"
+        self.privatedata['build_date'] = "03-JUL-2025"
 
         # custom display toggles
         # what to show in stat string constuct
@@ -44,6 +44,9 @@ class Settings:
         self.data['raw_irc_console_display'] = False
         self.data['enable_overlay'] = True
         self.data['enable_twitch_bot'] = True
+        # local html server settings
+        self.data['html_server_enabled'] = False
+        self.data['html_server_port'] = 8888
 
         temp = "$FACTIONICON$ $NAME$<BR>"
         self.data['overlay_default_left_pf'] = temp
@@ -108,9 +111,7 @@ class Settings:
         # temp = os.path.normpath("styles/overlay_style.css")
         # self.data['css_style_unranked'] = temp
 
-        # local html server settings
-        self.data['html_server_enabled'] = False
-        self.data['html_server_port'] = 8888
+
         
         temp = os.path.normpath("styles/overlay_display_style.css")
         self.data['css_style_display'] = temp

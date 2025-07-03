@@ -38,6 +38,16 @@ class OptionsGeneral:
         v = int(bool(self.settings.data.get('raw_irc_console_display')))
         self.intvar_console_display_bool = IntVar(value=v)
 
+        v = int(bool(self.settings.data.get('html_server_enabled')))
+        self.intvar_html_server_enabled = IntVar(value=v)
+
+        v = int(self.settings.data.get('html_server_port'))
+        self.intvar_html_server_port = IntVar(value=v)
+
+        # Add close function to the window
+        #self.parent_frame.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+
         #try:
         #    v = int(self.settings.data.get('pollMethod'))
         #except TypeError:
@@ -96,19 +106,76 @@ class OptionsGeneral:
         )
         self.check_log_error_to_file.grid(sticky=W)
 
-    def save_toggles(self):
-        "saves all toggles."
 
-        self.settings.data['automaticTrigger'] = (
-            bool(self.intvar_automatic_trigger.get()))
+        # HTML Server Check
 
-        self.settings.data['logErrorsToFile'] = (
-            bool(self.intvar_log_errors_to_file.get()))
+        self.check_html_server_enabled = tkinter.Checkbutton(
+            self.frame,
+            text="Enable HTML Server",
+            variable=self.intvar_html_server_enabled,
+            command=self.html_server_toggled
+        )
+        self.check_html_server_enabled.grid(sticky=W)
 
-        self.settings.data['raw_irc_console_display'] = (
-            bool(self.intvar_console_display_bool.get()))
+        # HTML Server Port
+        self.label_html_server_port = tkinter.Label(
+            self.frame,
+            text="HTML Server Port (1024 to 65535):")
+        self.label_html_server_port.grid(row=5, column=0, sticky=W)
+        self.entry_html_server_port = tkinter.Entry(
+            self.frame,
+            textvariable=self.intvar_html_server_port,
+            width=5)
+        self.entry_html_server_port.bind(
+            "<Return>",
+            self.save_port)
+        self.entry_html_server_port.grid(row=5, column=1, sticky=W)
+
+    def save_port(self, event=None):
+            "Validate and save the HTML Server Port."
+            try:
+                port = int(self.intvar_html_server_port.get())
+                if 1024 <= port <= 65535:
+                    self.settings.data['html_server_port'] = port
+                    self.settings.save()
+                    logging.info(f"HTML Server Port set to {port}")
+                    if self.intvar_html_server_enabled.get():
+                        messagebox.showinfo(
+                            "HTML Server Port Updated",
+                            f"HTML Server Port has been set to {port}.\n"
+                            "Toggle the HTML Server off and on to apply changes.")
+
+                    self.parent_frame.focus()  # Return focus to the parent frame
+                    return True
+                else:
+                    messagebox.showerror("Invalid Port", "Port must be between 1024 and 65535.")
+                    try:
+                        # Reset to the last valid port
+                        self.intvar_html_server_port.set(int(self.settings.data.get('html_server_port')))
+                    except (TypeError, ValueError):
+                        # If the last valid port is not set, reset to a default value
+                        self.intvar_html_server_port.set(8888)
+                    return False
+            except ValueError:
+                messagebox.showerror("Invalid Input", "Please enter a valid port number.")
+                try:
+                    self.intvar_html_server_port.set(int(self.settings.data.get('html_server_port')))
+                except (TypeError, ValueError):
+                    # If the last valid port is not set, reset to a default value
+                    self.intvar_html_server_port.set(8888)
+                return False
         
-        self.settings.save()
+    def html_server_toggled(self):
+        "Change preference for HTML Server."
+        if (bool(self.intvar_html_server_enabled.get())):
+            logging.info("HTML Server Enabled")
+            self.main_window.html_server_start()
+        else:
+            logging.info("HTML Server Disabled")
+            self.main_window.html_server_stop()
+
+        self.save_toggles()
+
 
     def toggle_log_errors_to_file(self):
         "Change preference for logging errors to file."
@@ -122,3 +189,20 @@ class OptionsGeneral:
             logging.getLogger().disabled = True
 
         self.save_toggles()
+
+    def save_toggles(self):
+        "saves all toggles."
+
+        self.settings.data['automaticTrigger'] = (
+            bool(self.intvar_automatic_trigger.get()))
+
+        self.settings.data['logErrorsToFile'] = (
+            bool(self.intvar_log_errors_to_file.get()))
+
+        self.settings.data['raw_irc_console_display'] = (
+            bool(self.intvar_console_display_bool.get()))
+        
+        self.settings.data['html_server_enabled'] = (
+            bool(self.intvar_html_server_enabled.get()))
+        
+        self.settings.save()

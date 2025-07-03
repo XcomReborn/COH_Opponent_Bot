@@ -45,3 +45,4 @@ class GUIOptionsWindow:
         "on close options destroy window."
         self.options_menu.destroy()
         self.mainwindow.options_menu = None
+        print("Options Window Closed")

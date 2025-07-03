@@ -549,22 +549,22 @@ class OptionsOverlay:
 
         # Stats Display PreFormat
 
-        self.frame_local_html_server = tkinter.LabelFrame(
-                self.frame,
-                text="Local HTML Server",
-                padx=5,
-                pady=5)
+        # self.frame_local_html_server = tkinter.LabelFrame(
+        #         self.frame,
+        #         text="Local HTML Server",
+        #         padx=5,
+        #         pady=5)
 
-        self.frame_local_html_server.grid(sticky=N+S+W+E)
-        self.frame_local_html_server.grid_rowconfigure(0, weight=1)
-        self.frame_local_html_server.grid_columnconfigure(0, weight=1)
+        # self.frame_local_html_server.grid(sticky=N+S+W+E)
+        # self.frame_local_html_server.grid_rowconfigure(0, weight=1)
+        # self.frame_local_html_server.grid_columnconfigure(0, weight=1)
 
-        self.button_start_html_server = tkinter.Button(
-            self.frame_local_html_server,
-            text="Start Local HTML Server",
-            command=self.main_window.start_local_html_server)
+        # self.button_start_html_server = tkinter.Button(
+        #     self.frame_local_html_server,
+        #     text="Start Local HTML Server",
+        #     command=self.main_window.start_local_html_server)
         
-        self.button_start_html_server.grid(sticky=W+E, row=0, column=0)
+        # self.button_start_html_server.grid(sticky=W+E, row=0, column=0)
         
 
 

@@ -34,6 +34,7 @@ from classes.oppbot_memory_monitor import MemoryMonitor
 from classes.oppbot_gui_options_window import GUIOptionsWindow
 from classes.oppbot_irc_client import IRC_Client
 from classes.oppbot_settings import Settings
+from classes.oppbot_html_server import OppBotHtmlServer
 
 class GUIMainWindow:
     "Graphical User Interface for the COH Opponent Bot."
@@ -43,6 +44,8 @@ class GUIMainWindow:
         self.irc_twitch_client = None
         # reference for coh memory monitor
         self.coh_memory_monitor = None
+        # reference to the html server
+        self.html_server = None
 
         self.settings = Settings()
 
@@ -436,6 +439,10 @@ class GUIMainWindow:
 
         self.start_coh_monitor()
 
+        # start HTML Server
+        if self.settings.data.get('html_server_enabled'):
+            self.html_server_start()
+
         self.master.mainloop()
 
     #@staticmethod
@@ -758,9 +765,30 @@ class GUIMainWindow:
             tkconsole=self.txt_console)
         self.coh_memory_monitor.start()
 
-    def start_local_html_server(self):
-        print("Starting Local HTML Server")
+    def html_server_start(self):
+        logging.info("Starting Local HTML Server")
+        if not self.html_server:
+            self.settings.load()
+            port = self.settings.data.get('html_server_port')
+            if not port:
+                logging.info("No HTML Server Port set: server will not start.")
+                return
+            self.html_server = OppBotHtmlServer(port=port)
+            self.html_server.start()
+        else:
+            logging.info("HTML Server is already running, nothing to do.")
 
+    def html_server_stop(self):
+        logging.info("Stopping Local HTML Server")
+        if self.html_server:
+            # Stop the HTML server
+            self.html_server.stop()
+            # Wait for the thread to finish
+            self.html_server.join()
+            # set reference to None
+            self.html_server = None
+        else:
+            logging.info("HTML Server was not running, nothing to stop.")
 
     def on_closing(self):
         "on closing."
@@ -773,6 +801,13 @@ class GUIMainWindow:
             if self.coh_memory_monitor:
                 self.coh_memory_monitor.close()
                 self.coh_memory_monitor.join()
+
+            if self.html_server:
+                if self.html_server.is_alive():
+                    logging.info("Stopping HTML Server")
+                    self.html_server.stop()
+                    # Wait for the thread to finish
+                    self.html_server.join()
                 
         except Exception as e:
             logging.error(str(e))
