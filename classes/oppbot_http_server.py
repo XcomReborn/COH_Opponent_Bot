@@ -2,7 +2,7 @@ import http.server
 import threading
 import logging
 
-class OppBotHtmlServer(threading.Thread):
+class OppBotHttpServer(threading.Thread):
     """A simple HTTP server for OppBot that serves HTML content.
     This server responds to GET requests with a welcome message and handles 
     POST requests with a not implemented error."""
@@ -30,7 +30,7 @@ class OppBotHtmlServer(threading.Thread):
 if __name__ == "__main__":
 
     # Create an instance of the OppBotHTMLServer
-    server = OppBotHtmlServer()
+    server = OppBotHttpServer()
     logging.info("Starting OppBot HTML server...")
     server.start()
     waiting = input("Press Enter to stop the server...")
