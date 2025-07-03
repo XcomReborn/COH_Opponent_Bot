@@ -1391,13 +1391,13 @@ class GameData():
             cssFilePath = self.settings.data.get('css_style_custom')
 
             # add match type div surrounding each team
-            team1 = f'<div class = "{self.matchType.name}">{team1}\n</div>'
-            team2 = f'<div class = "{self.matchType.name}">{team2}\n</div>'
+            team1 = f'<div class = "{self.matchType.name}">\n{team1}\n</div>'
+            team2 = f'<div class = "{self.matchType.name}">\n{team2}\n</div>'
 
             # use AUTOMATCH as css tag if automatch is enabled
             if self.automatch:
-                team1 = f'<div class = "AUTOMATCH">{team1}\n</div>'
-                team2 = f'<div class = "AUTOMATCH">{team2}\n</div>'
+                team1 = f'<div class = "AUTOMATCH">\n{team1}\n</div>'
+                team2 = f'<div class = "AUTOMATCH">\n{team2}\n</div>'
 
             # check if css file exists
             # and if not output the default template to folder
