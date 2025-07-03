@@ -325,7 +325,6 @@ class Settings:
 
             libraryFolder = "\\steamapps\\libraryfolders.vdf"
             filePath = self.data.get('steamFolder') + libraryFolder
-            # print(filePath)
             steamlibraryBases = []
 
             if self.data.get('steamFolder'):
@@ -350,7 +349,6 @@ class Settings:
                 # Assign check each library install file
                 # for the location of cohPath
                 for steamBase in steamlibraryBases:
-                    # print(steamBase)
                     gameLoc = (
                         "\\steamapps\\common\\Company of Heroes Relaunch"
                         "\\RelicCOH.exe"
@@ -404,7 +402,6 @@ class Settings:
 
                 ).read()
                 statdata = json.loads(response.decode('utf-8'))
-                # print(statdata)
                 if (statdata['result']['message'] == "SUCCESS"):
                     logging.info("statdata load succeeded")
                     if statdata['statGroups'][0]['members'][0]['alias']:

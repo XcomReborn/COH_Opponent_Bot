@@ -308,9 +308,8 @@ class IRC_Client(threading.Thread):
 
         if (self.ircMessageBuffer):
             try:
-                # print("Buffered")
                 stringToSend = str(self.ircMessageBuffer.popleft())
-                print("string to send : " + stringToSend)
+                logging.info("string to send : " + stringToSend)
                 if self.ircSocket:
                     self.ircSocket.send((stringToSend).encode('utf8'))
             except Exception as e:

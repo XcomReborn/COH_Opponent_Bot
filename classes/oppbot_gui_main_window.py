@@ -500,14 +500,14 @@ class GUIMainWindow:
 
         files = [('Json', '*.json'), ('All Files', '*.*')]
         working_directory = os.getcwd()
-        print(f"Working Directory : {working_directory}")
+        logging.info(f"Working Directory : {working_directory}")
         self.master.filename = tkinter.filedialog.asksaveasfilename(
             initialdir=working_directory,
             initialfile="data.json",
             title="Save Preferences File",
             filetypes=files)
         logging.info("File Path : %s", self.master.filename)
-        print("File Path : " + str(self.master.filename))
+        logging.info("File Path : " + str(self.master.filename))
         if(self.master.filename):
             pattern = re.compile(r"\u20A9|\uFFE6|\u00A5|\uFFE5")
             # replaces both Won sign varients for korean language
@@ -522,14 +522,13 @@ class GUIMainWindow:
 
         files = [('Json', '*.json'), ('All Files', '*.*')]
         working_directory = os.getcwd()
-        print(f"workingDirectory : {working_directory}")
+        logging.info(f"workingDirectory : {working_directory}")
         self.master.filename = tkinter.filedialog.askopenfilename(
             initialdir=working_directory,
             initialfile="data.json",
             title="Load Preferences File",
             filetypes=files)
         logging.info("File Path : %s" , self.master.filename)
-        print("File Path : " + str(self.master.filename))
         if(self.master.filename):
             pattern = re.compile(r"\u20A9|\uFFE6|\u00A5|\uFFE5")
             # replaces both Won sign varients for korean language
@@ -677,7 +676,6 @@ class GUIMainWindow:
             title="Select location of RelicCOH.exe file",
             filetypes=(("RelicCOH", "*.exe"), ("all files", "*.*")))
         logging.info("File Path : %s", self.master.filename)
-        print(f"File Path : {self.master.filename}")
         if(self.master.filename != ""):
             # set cohPath
             if (os.path.isfile(self.master.filename)):

@@ -1,5 +1,6 @@
 import http.server
 import threading
+import logging
 
 class OppBotHtmlServer(threading.Thread):
     """A simple HTTP server for OppBot that serves HTML content.
@@ -15,24 +16,24 @@ class OppBotHtmlServer(threading.Thread):
 
     def run(self):
         """Start the server and listen for requests."""
-        print(f"Starting server on {self.server_address[0]}:{self.server_address[1]}")
+        logging.info(f"Starting server on {self.server_address[0]}:{self.server_address[1]}")
         self.httpd.serve_forever()
 
     def stop(self):
         """Stop the server."""
-        print("Stopping server...")
+        logging.info("Stopping server...")
         self.httpd.shutdown()
         self.httpd.server_close()
-        print("Server stopped.")
+        logging.info("Server stopped.")
 
 
 if __name__ == "__main__":
 
     # Create an instance of the OppBotHTMLServer
     server = OppBotHtmlServer()
-    print("Starting OppBot HTML server...")
+    logging.info("Starting OppBot HTML server...")
     server.start()
     waiting = input("Press Enter to stop the server...")
     server.stop()
-    print("OppBot HTML server has been stopped.")
-    print("Server stopped.")
+    logging.info("OppBot HTML server has been stopped.")
+    logging.info("Server stopped.")
