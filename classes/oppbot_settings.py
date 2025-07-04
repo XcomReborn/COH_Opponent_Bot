@@ -45,8 +45,8 @@ class Settings:
         self.data['enable_overlay'] = True
         self.data['enable_twitch_bot'] = True
         # local html server settings
-        self.data['html_server_enabled'] = False
-        self.data['html_server_port'] = 8888
+        self.data['http_server_enabled'] = False
+        self.data['http_server_port'] = 8888
 
         temp = "$FACTIONICON$ $NAME$<BR>"
         self.data['overlay_default_left_pf'] = temp

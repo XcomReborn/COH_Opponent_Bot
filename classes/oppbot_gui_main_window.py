@@ -440,8 +440,8 @@ class GUIMainWindow:
         self.start_coh_monitor()
 
         # start HTML Server
-        if self.settings.data.get('html_server_enabled'):
-            self.html_server_start()
+        if self.settings.data.get('http_server_enabled'):
+            self.http_server_start()
 
         self.master.mainloop()
 
@@ -763,11 +763,11 @@ class GUIMainWindow:
             tkconsole=self.txt_console)
         self.coh_memory_monitor.start()
 
-    def html_server_start(self):
+    def http_server_start(self):
         logging.info("Starting Local HTML Server")
         if not self.http_server:
             self.settings.load()
-            port = self.settings.data.get('html_server_port')
+            port = self.settings.data.get('http_server_port')
             if not port:
                 logging.info("No HTML Server Port set: server will not start.")
                 return
@@ -776,7 +776,7 @@ class GUIMainWindow:
         else:
             logging.info("HTML Server is already running, nothing to do.")
 
-    def html_server_stop(self):
+    def http_server_stop(self):
         logging.info("Stopping Local HTML Server")
         if self.http_server:
             # Stop the HTML server
