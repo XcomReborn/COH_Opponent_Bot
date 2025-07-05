@@ -276,7 +276,7 @@ color: white;
 .player7 {}
 .player8 {}
 
-/* extra elements for each player */
+/* player_type for each player */
 .CPU {}
 .HUMAN {}
 .REMOTE_HUMAN {}
@@ -288,3 +288,24 @@ this is determined by the player name being the same as the
 player name derived from the program runners steam stats 
 is is usually the name as HUMAN but not in the case of downloaded replays*/
 .player_main {}
+
+
+/* The element hierarchy is as follows:
+   - .container
+     - .playerTeam
+       - AUTOMATCH (if applicable)
+        - Match type (e.g., .TEAM_2v2, .ASSAULT_2V2, etc.)
+         - .player1, player_main (if applicable) ,player_type, faction, chosen display elements
+         - .player2, player_type, faction, chosen display elements*
+         - .player3, player_type, faction, chosen display elements*
+         - .player4, player_type, faction, chosen display elements*
+     - .opponentTeam
+       - AUTOMATCH (if applicable)
+        - Match type (e.g., .TEAM_2v2, .ASSAULT_2V2, etc.)
+         - .player5, player_type, faction, chosen display elements
+         - .player6, player_type, faction, chosen display elements*
+         - .player7, player_type, faction, chosen display elements*
+         - .player8, player_type, faction, chosen display elements*
+
+         * optional players, not always displayed
+   This allows for easy styling of each player and team. */
