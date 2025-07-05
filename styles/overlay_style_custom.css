@@ -1,6 +1,6 @@
-
-
-
+/* This file is used to style the overlay for the COH Opponent Bot */
+/* It is provided to give an alternative style to the default overlay */
+/* Feel free to modify it to suit your needs */
 
 body {
     position: relative;
@@ -264,7 +264,6 @@ color: white;
 /* AUTOMATCH surrounds both teams if the match is automatch */
 .AUTOMATCH {}
 
-
 /* players 1-4 will always be on the player team */
 .player1 {}
 .player2 {}
@@ -283,9 +282,28 @@ color: white;
 .REMOTE_HUMAN {}
 .EMPTY_SLOT {}
 
-
 /* player_main is also used to surround the main player 
 this is determined by the player name being the same as the 
 player name derived from the program runners steam stats 
 is is usually the name as HUMAN but not in the case of downloaded replays*/
 .player_main {}
+
+/* The element hierarchy is as follows:
+   - .container
+     - .playerTeam
+       - AUTOMATCH (if applicable)
+        - Match type (e.g., .TEAM_2v2, .ASSAULT_2V2, etc.)
+         - .player1, player_main (if applicable) ,player_type, faction, chosen display elements
+         - .player2, player_type, faction, chosen display elements*
+         - .player3, player_type, faction, chosen display elements*
+         - .player4, player_type, faction, chosen display elements*
+     - .opponentTeam
+       - AUTOMATCH (if applicable)
+        - Match type (e.g., .TEAM_2v2, .ASSAULT_2V2, etc.)
+         - .player5, player_type, faction, chosen display elements
+         - .player6, player_type, faction, chosen display elements*
+         - .player7, player_type, faction, chosen display elements*
+         - .player8, player_type, faction, chosen display elements*
+
+         * optional players, not always displayed
+   This allows for easy styling of each player and team. */
