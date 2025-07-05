@@ -48,6 +48,7 @@ html {
     position: relative;
     display: inline;
     width: 50px;
+    top: 3pt;
     
 }
 
@@ -232,10 +233,14 @@ color: white;
 
   }
 
+/* Factions */
+
 .US{}
 .WM{}
 .PE{}
 .CW{}
+
+/* Match types */
 
 .CUSTOM{}
 .ONES{}
@@ -254,4 +259,33 @@ color: white;
 .COMPSTOMP {}
 .ASSAULT {}
 .PANZERKRIEG  {}
-.STONEWALL {} 
+.STONEWALL {}
+
+/* AUTOMATCH surrounds both teams if the match is automatch */
+.AUTOMATCH {}
+
+
+/* players 1-4 will always be on the player team */
+.player1 {}
+.player2 {}
+.player3 {}
+.player4 {}
+
+/* players 5-8 will always be on the opponent team */
+.player5 {}
+.player6 {}
+.player7 {}
+.player8 {}
+
+/* extra elements for each player */
+.CPU {}
+.HUMAN {}
+.REMOTE_HUMAN {}
+.EMPTY_SLOT {}
+
+
+/* player_main is also used to surround the main player 
+this is determined by the player name being the same as the 
+player name derived from the program runners steam stats 
+is is usually the name as HUMAN but not in the case of downloaded replays*/
+.player_main {}

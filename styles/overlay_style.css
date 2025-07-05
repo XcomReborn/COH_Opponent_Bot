@@ -1,7 +1,6 @@
-
-
-
-
+/* File: styles/overlay_style.css */
+/* This file is used to style the overlay for the COH Opponent Bot */
+/* It can be used to provide information on available style elements */
 body {
     position: relative;
     background-color: transparent;
@@ -276,3 +275,16 @@ color: white;
 .player6 {}
 .player7 {}
 .player8 {}
+
+/* extra elements for each player */
+.CPU {}
+.HUMAN {}
+.REMOTE_HUMAN {}
+.EMPTY_SLOT {}
+
+
+/* player_main is also used to surround the main player 
+this is determined by the player name being the same as the 
+player name derived from the program runners steam stats 
+is is usually the name as HUMAN but not in the case of downloaded replays*/
+.player_main {}
