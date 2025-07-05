@@ -278,7 +278,9 @@ color: white;
 
 /* extra elements for each player */
 .CPU {}
-.HUMAN {}
+.HUMAN .name{ 
+    color: gold;
+    text-shadow: 2px 2px black;}
 .REMOTE_HUMAN {}
 .EMPTY_SLOT {}
 
