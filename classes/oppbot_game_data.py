@@ -152,7 +152,9 @@ class GameData():
         for item in replay_parser.playerList:
             name = item.get('name')
             faction_name = item.get('faction')
-            player = Player(name=name, faction_name=faction_name)
+            team = item.get('team')
+            player_type = item.get('player_type')
+            player = Player(name=name, faction_name=faction_name, team=team, player_type=player_type)
             self.playerList.append(player)
 
         logging.info(self.playerList)
@@ -168,12 +170,11 @@ class GameData():
         humanCounter = 0
 
         for item in self.playerList:
-            if ("CPU" in item.name):
+            if (item.is_computer):
                 cpuCounter += 1
-            else:
-                # ignore empty slots with no name
-                if (item.name):
-                    humanCounter += 1
+        # ignore empty slots with no name
+            if (item.is_human) or (item.is_remote_human):
+                humanCounter += 1
 
         logging.info(f"cpuCounter {cpuCounter}")
         logging.info(f"humanCounter {humanCounter}")
@@ -231,6 +232,8 @@ class GameData():
         normalCounter = 0
         hardCounter = 0
         expertCounter = 0
+
+
 
         for item in self.playerList:
             if (item.stats is None):
@@ -1286,6 +1289,12 @@ class GameData():
 
             uopf = self.settings.data.get('enable_overlay')
             enable_overlay = bool(uopf)
+
+            # # debugs
+            # print(f"team1List: {team1List}")
+            # print(f"team2List: {team2List}")
+
+
             if (enable_overlay):
                 # player team 1 will always be players 1 - 4
                 player_number = 1
@@ -1320,13 +1329,24 @@ class GameData():
                     )
                     # surround with faction name
                     theString = f'<div class = "{item.faction.name}">{theString}</div>'
+
+                    # surround with human or computer
+                    if item.is_computer:
+                        theString = f'<div class = "CPU">{theString}</div>'
+                    if item.is_human:
+                        theString = f'<div class = "HUMAN">{theString}</div>'
+                    if item.is_remote_human:
+                        theString = f'<div class = "REMOTE_HUMAN">{theString}</div>'
+
                     # if main player surround with player_main div
                     if str(item.name) == str(self.settings.data.get('steamAlias')):
                         theString = f'<div class = "player_main">{theString}</div>'
+
                     # surround with player number
                     theString = f'\n<div class = "player{player_number}">{theString}</div>'
                     player_number += 1
 
+                    
 
                     team1 += str(theString)
                 
@@ -1363,11 +1383,22 @@ class GameData():
                         sfDict,
                         overlay=True
                     )
+
                     # surround with faction name
                     theString = f'<div class = "{item.faction.name}">{theString}</div>'
+
+                    # surround with human or computer
+                    if item.is_computer:
+                        theString = f'<div class = "CPU">{theString}</div>'
+                    if item.is_human:
+                        theString = f'<div class = "HUMAN">{theString}</div>'
+                    if item.is_remote_human:
+                        theString = f'<div class = "REMOTE_HUMAN">{theString}</div>'
+
                     # surround with player number
                     theString = f'\n<div class = "player{player_number}">{theString}</div>'
                     player_number += 1
+
 
                     team2 += str(theString)
             else:
@@ -1391,8 +1422,8 @@ class GameData():
             cssFilePath = self.settings.data.get('css_style_custom')
 
             # add match type div surrounding each team
-            team1 = f'<div class = "{self.matchType.name}">\n{team1}\n</div>'
-            team2 = f'<div class = "{self.matchType.name}">\n{team2}\n</div>'
+            team1 = f'<div class = "{self.matchType.name}">{team1}\n</div>'
+            team2 = f'<div class = "{self.matchType.name}">{team2}\n</div>'
 
             # use AUTOMATCH as css tag if automatch is enabled
             if self.automatch:

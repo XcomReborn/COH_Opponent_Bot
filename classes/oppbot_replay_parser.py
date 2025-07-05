@@ -66,6 +66,41 @@ class ReplayParser:
             logging.exception("Stack Trace: ")
             self.success = False
 
+    def read_4_bytes_as_unsigned_int(self) -> int:
+        "Reads 4 bytes as an unsigned int."
+
+        try:
+            if self.data:
+                fourBytes = bytearray(
+                    self.data[self.dataIndex:self.dataIndex+4])
+                self.dataIndex += 4
+                theInt = int.from_bytes(
+                    fourBytes,
+                    byteorder='little',
+                    signed=False)
+                return theInt
+        except Exception as e:
+            return None
+
+    def read_byte_as_unsigned_int(self) -> int:
+        "Reads 1 byte as an unsigned int."
+
+        try:
+            if self.data:
+                byte = bytearray(
+                    self.data[self.dataIndex:self.dataIndex+1])
+                self.dataIndex += 1
+                theInt = int.from_bytes(
+                    byte,
+                    byteorder='little',
+                    signed=False)
+                return theInt
+        except Exception as e:
+            logging.error(str(e))
+            logging.error("Failed to read 4 bytes")
+            logging.exception("Stack Trace: ")
+            self.success = False            
+
     def read_bytes(self, numberOfBytes):
         "reads a number of bytes from the data array"
 
@@ -365,14 +400,20 @@ class ReplayParser:
 
         if (chunkType == "DATAINFO") and (chunkVersion == 6):
 
-            userName = self.read_length_string()
-            self.read_unsigned_long_4_bytes()
-            self.read_unsigned_long_4_bytes()
-            faction = self.read_length_ASCII_string()
-            self.read_unsigned_long_4_bytes()
-            self.read_unsigned_long_4_bytes()
+            userName = self.read_length_string() # player name
+            player_type = self.read_byte_as_unsigned_int() # 0, 1, 2, 5 - human, AI, remote human, empty slot
+            self.read_byte_as_unsigned_int()
+            self.read_byte_as_unsigned_int()
+            self.read_byte_as_unsigned_int()
+            team = self.read_byte_as_unsigned_int() # 0 , 1
+            self.read_byte_as_unsigned_int()
+            self.read_byte_as_unsigned_int()
+            self.read_byte_as_unsigned_int()
+            faction = self.read_length_ASCII_string() # faction name axis, allies, axis_panzer_elite, allies_commonwealth
+            self.read_4_bytes_as_unsigned_int()
+            self.read_4_bytes_as_unsigned_int()
 
-            self.playerList.append({'name': userName, 'faction': faction})
+            self.playerList.append({'name': userName, 'faction': faction, 'team': team, 'player_type' : player_type})
 
         self.seek(chunkStart + chunkLength, 0)
 

@@ -1,0 +1,270 @@
+
+
+
+
+body {
+    position: relative;
+    background-color: transparent;
+    padding: 0pt;
+
+  }
+
+html {
+    position: relative;
+    padding: 0pt;
+}
+
+.container{width:100%;
+    position: relative;
+    top: 0pt;
+    font-size: 20pt;
+}
+
+.countryflagimg{
+    position: relative;
+    display: inline;
+    height: 16pt;
+    top: 0pt;
+}
+
+.countryflagimg img{
+    position: relative;
+    display: inline;
+    height:16pt;
+    top: -3pt;
+
+}
+
+
+
+.factionflagimg{
+    position: relative;
+    display: inline;
+    height: 16pt;
+    top: 0pt;
+}
+
+.factionflagimg img{
+    position: relative;
+    display: inline;
+    width: 50px;
+    
+}
+
+.rankimg {
+    position: relative;
+    top: 10pt;
+    height: 30pt;
+    display: inline;
+}
+
+.rankimg img{
+    position: relative;
+    height: 24pt;
+    display: inline;
+    top: -8pt;
+}
+
+.textVariables {
+    position: relative;
+    display: inline;
+}
+
+.name {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.faction {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.matchtype {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.country {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.totalwins {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.totallosses {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.totalwlratio {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.wins {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.losses {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.disputes {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.streak {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.drops {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.rank {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.level {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.wlratio {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.nonVariableText{
+    position: relative;
+    display: inline;
+}
+
+.steamprofile{
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.cohstatslink{
+position: relative;
+display: inline;
+top: 0pt;
+}
+
+.steamid {
+    position: relative;
+    display: inline;
+    top: 0pt;
+}
+
+.opponentTeam {
+
+      position : relative;
+      display: inline;
+      top: 3pt;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      float: right;
+      overflow: hidden;
+      text-align: right;
+      padding-bottom: 0pt;
+      padding: auto;
+      }
+
+.opponentTeam .name{
+
+color: white;
+
+}
+
+.playerTeam {
+
+      position: relative;
+      display: inline;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      float:left;
+      text-align: left;
+      padding: auto;
+      overflow: hidden;
+
+  }
+
+  .playerTeam .name{
+
+    color: white;
+
+}
+
+.playerStats {
+
+      position: relative;
+      top: 2pt;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding-bottom: 0pt;
+
+  }
+
+.US{}
+.WM{}
+.PE{}
+.CW{}
+
+.CUSTOM{}
+.ONES{}
+.TWOS{}
+.THREES{}
+.FOURS{} 
+.TEAM_2v2{}
+.TEAM_3V3 {}
+.TEAM_4V4 {}
+.ASSAULT_2V2 {}
+.ASSAULT_TEAM_2V2 {}
+.ASSAULT_TEAM_3V3 {}
+.PANZERKRIEG_2v2 {}
+.PANZERKRIEG_TEAM_2v2 {}
+.PANZERKRIEG_TEAM_3v3 {}
+.COMPSTOMP {}
+.ASSAULT {}
+.PANZERKRIEG  {}
+.STONEWALL {} 
+
+
+/* players 1-4 will always be on the player team */
+.player1 {}
+.player2 {display: none;}
+.player3 {display: none;}
+.player4 {display: none;}
+
+/* players 5-8 will always be on the opponent team */
+.player5 {}
+.player6 {display: none;}
+.player7 {display: none;}
+.player8 {display: none;}
