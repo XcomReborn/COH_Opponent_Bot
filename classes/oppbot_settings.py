@@ -22,7 +22,7 @@ class Settings:
 
         # Manually update for about box.
         self.privatedata['version_number'] = "5.3.1"
-        self.privatedata['build_date'] = "05-JUL-2025"
+        self.privatedata['build_date'] = "07-JUL-2025"
 
         # custom display toggles
         # what to show in stat string constuct
@@ -105,13 +105,6 @@ class Settings:
 
         temp = os.path.normpath("styles/overlay_style.css")
         self.data['css_style_custom'] = temp
-
-        # temp = os.path.normpath("styles/overlay_style.css")
-        # self.data['css_style_ranked'] = temp
-        # temp = os.path.normpath("styles/overlay_style.css")
-        # self.data['css_style_unranked'] = temp
-
-
         
         temp = os.path.normpath("styles/overlay_display_style.css")
         self.data['css_style_display'] = temp
