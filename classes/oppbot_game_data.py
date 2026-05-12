@@ -276,6 +276,8 @@ class GameData():
                 if (int(self.numberOfComputers) == 0):
                     self.matchType = MatchType.FOURS
 
+        # print(self)
+
         return True
 
     def check_for_game_in_progress(self):

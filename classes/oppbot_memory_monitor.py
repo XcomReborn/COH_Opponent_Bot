@@ -82,6 +82,13 @@ class MemoryMonitor(threading.Thread):
         self.post_steam_number()
         # enable to output to the opponent bot channel
         self.post_data()
+        # If enabled send start bets message to chat
+        self.post_start_bets_message_to_chat()
+
+    def post_start_bets_message_to_chat(self):
+        if self.settings.data.get('writePlaceYourBetsInChat'):
+            if self.irc_client:
+                self.irc_client.send_message_to_chat("!startbets")
 
     def post_steam_number(self):
         try:

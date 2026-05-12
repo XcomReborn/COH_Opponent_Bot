@@ -99,6 +99,17 @@ class OptionsTwitchChat:
 
         self.check_own.grid(sticky=W)
 
+
+        # write start bets check
+
+        self.check_start_bets = tkinter.Checkbutton(
+            self.frame,
+            text="Write !startbets in Chat on game start",
+            variable=self.intvar_place_bets,
+            command=self.save_toggles)
+
+        self.check_start_bets.grid(sticky=W)
+
         # Text Variables
 
         self.frame_overlay_text = tkinter.LabelFrame(
@@ -264,9 +275,11 @@ class OptionsTwitchChat:
         self.settings.data['automaticSetBettingOdds'] = (
             bool(self.intvar_setodds.get()))
 
+        # deprecated, will be removed in a future update
         self.settings.data['writeIWonLostInChat'] = (
             bool(self.intvar_write_won_lost.get()))
-
+        
+        # readded to options because I use it.
         self.settings.data['writePlaceYourBetsInChat'] = (
             bool(self.intvar_place_bets.get()))
 
