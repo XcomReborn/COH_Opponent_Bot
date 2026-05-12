@@ -109,7 +109,7 @@ From the command line in the appropriate directory use. "python coh_opponent_bot
 Currently built with:<br>
 <br>
 python version 3.12.0<br>
-PyInstaller version 6.7.0<br>
+PyInstaller version 6.14.1<br>
 <br>
 Python Dependencies :<br>
 <br>

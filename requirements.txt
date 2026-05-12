@@ -1,0 +1,5 @@
+mem_edit==0.8
+pymem==1.14.0
+TkToolTip==1.2.0
+requests==2.31.0
+pyinstaller==6.14.1
