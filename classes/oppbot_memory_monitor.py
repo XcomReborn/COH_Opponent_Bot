@@ -88,7 +88,7 @@ class MemoryMonitor(threading.Thread):
     def post_start_bets_message_to_chat(self):
         if self.settings.data.get('writePlaceYourBetsInChat'):
             if self.irc_client:
-                self.irc_client.send_message_to_chat("!startbets")
+                self.irc_client.send_private_message_to_IRC("!startbets")
 
     def post_steam_number(self):
         try:
